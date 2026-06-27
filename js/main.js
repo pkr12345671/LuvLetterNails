@@ -25,14 +25,29 @@ const CONFIG = {
 const BOOKING = {
   // Step 1 services. Edit name / min (minutes) / price / desc / cat freely.
   services: [
-    { cat: "Full sets", name: "Gel-X / Builder Gel Full Set", min: 90, price: "$75", desc: "A brand-new custom set, shaped and designed start to finish." },
-    { cat: "Full sets", name: "Acrylic Full Set", min: 90, price: "$70", desc: "Durable acrylic set in your shape and length." },
-    { cat: "Fills & maintenance", name: "Fill / Refresh", min: 60, price: "$50", desc: "Rebalance and refresh an existing set (2–3 weeks)." },
-    { cat: "Fills & maintenance", name: "Gel Manicure", min: 45, price: "$40", desc: "Natural-nail gel polish, cuticle care, shape." },
-    { cat: "Press-ons", name: "Press-On Application", min: 30, price: "$25", desc: "Apply a Luv Letter press-on set in studio." },
-    { cat: "Press-ons", name: "Custom Press-On Fitting", min: 45, price: "$35", desc: "Get sized and matched for a made-to-order set." },
-    { cat: "Add-ons & care", name: "Nail Art (simple)", min: 30, price: "from $10", desc: "Add a little art to your appointment." },
-    { cat: "Add-ons & care", name: "Soak-Off / Removal", min: 30, price: "$20", desc: "Safe removal of a previous set." },
+    // ----- Copycat Sets -----
+    { cat: "Copycat Sets", name: "Gel Polish Mani", min: 60, price: "$70", desc: "Dry manicure, shaping & gel polish on natural nails — no extensions. Lasts 4+ weeks." },
+    { cat: "Copycat Sets", name: "Structured Mani", min: 120, price: "$90", desc: "Builder-gel structured manicure on natural nails — adds strength, no extensions." },
+    { cat: "Copycat Sets", name: "Gel-X", min: 120, price: "$90", desc: "Sleek full set with soft-gel full-cover tips — sturdy yet gentle on your natural nail." },
+    { cat: "Copycat Sets", name: "Sculpted", min: 150, price: "$100", desc: "Sculpted full set in builder gel, polygel, or hard gel — for nails needing extra TLC." },
+
+    // ----- LuvLetter Freestylez -----
+    { cat: "LuvLetter Freestylez", name: "Design Lvl Freestyle", min: 150, price: "$95", desc: "Gel polish, BIAB, or full set with a freestyle design (non-nail inspo welcome)." },
+    { cat: "LuvLetter Freestylez", name: "TrueLuv Freestyle", min: 210, price: "$125", desc: "A true freestyle — you give me full creative control of the design." },
+    { cat: "LuvLetter Freestylez", name: "Moodboard Freestyle", min: 240, price: "$150", desc: "Send a Pinterest board, collage, or 4+ pics and I'll design from your moodboard." },
+    { cat: "LuvLetter Freestylez", name: "Mystery Mani", min: 180, price: "$115", desc: "Pick your design the fun way — a random design from the gumball machine!" },
+
+    // ----- Special Sets -----
+    { cat: "Special Sets", name: "Character Set", min: 210, price: "varies", desc: "Gel polish, BIAB, or full set featuring multiple hand-drawn character designs." },
+    { cat: "Special Sets", name: "3D Sculpted Set", min: 270, price: "varies", desc: "Gel polish, BIAB, or full set with complex hand-sculpted 3D designs." },
+    { cat: "Special Sets", name: "Nail Date", min: 300, price: "$160", desc: "Bring a bestie or boo! Two guests get sets together — save on your appointment." },
+
+    // ----- Other Services -----
+    { cat: "Other Services", name: "Press-Ons Application", min: 60, price: "$10", desc: "Application of a LuvLetter Pressies set — cuticle care, shaping & application." },
+    { cat: "Other Services", name: "Press-Ons Sizing", min: 30, price: "$5", desc: "Get sized for press-ons (free if sized during another nail service)." },
+    { cat: "Other Services", name: "Design Change", min: 30, price: "$10", desc: "Not feeling your design but too early for a fill? Swap it out." },
+    { cat: "Other Services", name: "Removal", min: 30, price: "$5", desc: "Soak-off / removal of my work or another tech's work. Add-ons may apply." },
+    { cat: "Other Services", name: "Repair / Replacement", min: 10, price: "varies", desc: "Repair or replacement of broken, chipped, or missing nails." },
   ],
 
   // Weekly hours by weekday (0=Sun … 6=Sat). Each day is a list of [open, close]
@@ -239,6 +254,7 @@ function initBooker() {
   const sameDay = (a, b) => a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
   const monthLabel = (d) => d.toLocaleDateString(undefined, { month: "long", year: "numeric" });
   const longDate = (d) => d.toLocaleDateString(undefined, { weekday: "long", month: "long", day: "numeric" });
+  const fmtDur = (m) => { const h = Math.floor(m / 60), mm = m % 60; return h && mm ? `${h} hr ${mm} min` : h ? `${h} hr` : `${mm} min`; };
 
   const today = new Date(); today.setHours(0, 0, 0, 0);
   const maxDate = new Date(today); maxDate.setDate(maxDate.getDate() + BOOKING.maxDaysAhead);
@@ -280,7 +296,7 @@ function initBooker() {
             <span class="svc__name">${s.name}</span>
             ${s.desc ? `<span class="svc__desc">${s.desc}</span>` : ""}
           </span>
-          <span class="svc__meta"><span class="svc__price">${s.price}</span><span class="svc__dur">${s.min} min</span></span>
+          <span class="svc__meta"><span class="svc__price">${s.price}</span><span class="svc__dur">${fmtDur(s.min)}</span></span>
         </button>`).join("");
     return `<div class="svc-cat"><h4 class="svc-cat__title">${cat}</h4>${items}</div>`;
   }).join("");
@@ -290,7 +306,7 @@ function initBooker() {
       state.service = BOOKING.services[+btn.dataset.svc];
       state.date = null; state.time = null;
       document.getElementById("chosenService").textContent =
-        `${state.service.name} · ${state.service.min} min · ${state.service.price}`;
+        `${state.service.name} · ${fmtDur(state.service.min)} · ${state.service.price}`;
       // open the first month that has availability
       view = new Date(); view.setDate(1);
       let guard = 0;
@@ -357,7 +373,7 @@ function initBooker() {
   function renderSummary() {
     summary.innerHTML = `
       <div class="summary-row"><span>Service</span><strong>${state.service.name}</strong></div>
-      <div class="summary-row"><span>Duration</span><strong>${state.service.min} min</strong></div>
+      <div class="summary-row"><span>Duration</span><strong>${fmtDur(state.service.min)}</strong></div>
       <div class="summary-row"><span>Price</span><strong>${state.service.price}</strong></div>
       <div class="summary-row"><span>Date</span><strong>${longDate(state.date)}</strong></div>
       <div class="summary-row"><span>Time</span><strong>${fmt12(state.time)}</strong></div>`;
@@ -381,7 +397,7 @@ function initBooker() {
       say("Please add your name and a valid email so I can confirm. 💌", "err"); return;
     }
     data.set("service", state.service.name);
-    data.set("duration", `${state.service.min} min`);
+    data.set("duration", fmtDur(state.service.min));
     data.set("price", state.service.price);
     data.set("date", longDate(state.date));
     data.set("time", fmt12(state.time));
