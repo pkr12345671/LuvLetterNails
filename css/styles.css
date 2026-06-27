@@ -6,16 +6,18 @@
    ========================================================= */
 
 :root {
-  --cream:      #fbf6ef;
-  --paper:      #fffdf9;
-  --paper-edge: #f1e7d8;
-  --blush:      #f3d9dd;
-  --rose:       #e8b4b8;
-  --rose-deep:  #d98a93;
-  --red:        #b23a48;
-  --red-dark:   #7e2630;
-  --ink:        #2b2430;
-  --ink-soft:   #5c5360;
+  --cream:      #ffe9ec; /* soft blush page base (was cream) */
+  --blush-2:    #ffd7de; /* deeper blush band for alternating sections */
+  --paper:      #fff6f7; /* warm near-white for cards/forms (stays light) */
+  --paper-edge: #f6d2d8;
+  --blush:      #ffd7de;
+  --rose:       #f4a9b4;
+  --rose-deep:  #e97d8c;
+  --coral:      #ff6f61; /* bright accent — use on fills/dabs, not as text-on-white */
+  --red:        #c0394a; /* brighter rose-red, CTAs */
+  --red-dark:   #9a2e3c;
+  --ink:        #3a2b33; /* plum-ink */
+  --ink-soft:   #6b5560;
   --gold:       #c9a86a;
   --blue:       #2f4a7e; /* airmail blue */
 
@@ -212,8 +214,9 @@ section > * { max-width: var(--maxw); margin-inline: auto; }
 .hero__bg {
   position: absolute; inset: 0;
   background:
-    radial-gradient(60% 60% at 15% 10%, var(--blush), transparent 60%),
-    radial-gradient(55% 55% at 95% 90%, var(--rose) 0, transparent 55%),
+    radial-gradient(60% 60% at 12% 8%, var(--rose), transparent 62%),
+    radial-gradient(60% 60% at 95% 92%, var(--coral), transparent 55%),
+    radial-gradient(50% 50% at 80% 0%, var(--blush), transparent 60%),
     var(--cream);
   z-index: -1;
 }
@@ -306,7 +309,7 @@ section > * { max-width: var(--maxw); margin-inline: auto; }
 /* =========================================================
    Pressies — postage stamp sheet
    ========================================================= */
-.pressies { text-align: center; background: var(--paper); border-block: 1px solid var(--paper-edge); }
+.pressies { text-align: center; background: var(--blush-2); border-block: 1px solid var(--paper-edge); }
 .pressies__head { margin-bottom: 2.6rem; }
 
 .stamp-sheet {
@@ -492,7 +495,7 @@ section > * { max-width: var(--maxw); margin-inline: auto; }
 /* =========================================================
    Book — wax seal anchor
    ========================================================= */
-.book { text-align: center; background: var(--paper); border-block: 1px solid var(--paper-edge); position: relative; }
+.book { text-align: center; background: var(--blush-2); border-block: 1px solid var(--paper-edge); position: relative; }
 .book__seal-wrap { display: flex; justify-content: center; margin-bottom: 0.5rem; }
 .book__seal { width: clamp(100px, 14vw, 150px); filter: drop-shadow(0 10px 16px rgba(126,38,48,0.3)); animation: seal-in 0.8s var(--ease) both; }
 @keyframes seal-in { from { transform: scale(1.3) rotate(-12deg); opacity: 0; } to { transform: scale(1) rotate(-6deg); opacity: 1; } }

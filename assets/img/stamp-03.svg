@@ -6,7 +6,7 @@
     </linearGradient>
     <radialGradient id="stamp03gbg" cx="50%" cy="38%" r="75%">
       <stop offset="0%" stop-color="#fffdf9"/>
-      <stop offset="100%" stop-color="#ece0d1"/>
+      <stop offset="100%" stop-color="#ffe7d8"/>
     </radialGradient>
   </defs>
   <rect width="600" height="750" fill="url(#stamp03gbg)"/>
