@@ -622,6 +622,42 @@ section > * { max-width: var(--maxw); margin-inline: auto; }
 .summary-row span { color: var(--ink-soft); }
 .summary-row strong { color: var(--ink); text-align: right; }
 .summary-row + .summary-row { border-top: 1px dashed var(--paper-edge); }
+.summary-row--sub { font-size: 0.85rem; padding: 0.2rem 0; }
+.summary-row--sub span, .summary-row--sub strong { color: var(--ink-soft); font-weight: 600; }
+.summary-row--note { margin-top: 0.2rem; }
+.summary-row--note span, .summary-row--note strong { color: var(--red-dark); font-weight: 700; }
+
+/* "before you book" notice */
+.book__notice {
+  max-width: 680px;
+  margin: 0 auto 1.6rem;
+  text-align: left;
+  background: var(--paper);
+  border: 1.5px solid var(--rose-deep);
+  border-radius: var(--radius);
+  padding: 1rem 1.2rem;
+  box-shadow: var(--shadow-sm);
+}
+.book__notice p { margin: 0; font-size: 0.95rem; color: var(--ink); }
+
+/* add-ons step */
+.addons__hint { color: var(--ink-soft); font-size: 0.9rem; margin: 0 0 1rem; }
+.addon-list { display: flex; flex-direction: column; gap: 1.1rem; margin-bottom: 1.4rem; }
+.addon-group__title {
+  font-family: var(--sans); text-transform: uppercase; letter-spacing: 0.16em;
+  font-size: 0.7rem; font-weight: 700; color: var(--red); margin: 0 0 0.55rem;
+}
+.addon-group__chips { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.addon {
+  display: inline-flex; align-items: baseline; gap: 0.45rem; cursor: pointer;
+  background: #fff; border: 1.5px solid var(--paper-edge); border-radius: 999px;
+  padding: 0.5rem 0.9rem; font-family: var(--sans); transition: border-color 0.18s, background 0.18s, transform 0.12s var(--ease);
+}
+.addon:hover { border-color: var(--rose-deep); transform: translateY(-1px); }
+.addon__name { font-weight: 700; font-size: 0.9rem; color: var(--ink); }
+.addon__delta { font-size: 0.78rem; color: var(--ink-soft); }
+.addon.is-on { background: var(--red); border-color: var(--red); }
+.addon.is-on .addon__name, .addon.is-on .addon__delta { color: #fff; }
 
 /* =========================================================
    About
@@ -658,6 +694,30 @@ section > * { max-width: var(--maxw); margin-inline: auto; }
 .gallery__item { overflow: hidden; border-radius: 8px; aspect-ratio: 1; }
 .gallery__item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s var(--ease); }
 .gallery__item:hover img { transform: scale(1.08); }
+
+/* =========================================================
+   Info — hours / location / deposit
+   ========================================================= */
+.info { text-align: center; background: var(--blush-2); border-block: 1px solid var(--paper-edge); }
+.info__grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.4rem;
+  margin-top: 2.4rem; text-align: left;
+}
+.info__card {
+  background: var(--paper); border: 1px solid var(--paper-edge);
+  border-radius: var(--radius); padding: 1.6rem 1.5rem; box-shadow: var(--shadow-sm);
+}
+.info__card h3 { font-size: 1.5rem; font-style: italic; margin-bottom: 0.8rem; }
+.info__card p { color: var(--ink-soft); font-size: 0.95rem; margin: 0 0 0.7rem; }
+.info__card p:last-child { margin-bottom: 0; }
+.info__hours { list-style: none; padding: 0; margin: 0; }
+.info__hours li {
+  display: flex; justify-content: space-between; gap: 1rem;
+  padding: 0.35rem 0; border-bottom: 1px dashed var(--paper-edge); font-size: 0.95rem;
+}
+.info__hours li:last-child { border-bottom: 0; }
+.info__hours span:first-child { color: var(--ink); font-weight: 600; }
+.info__hours span:last-child { color: var(--red-dark); font-weight: 700; }
 
 /* =========================================================
    FAQ
@@ -736,6 +796,7 @@ section > * { max-width: var(--maxw); margin-inline: auto; }
   .stamp-sheet { grid-template-columns: repeat(3, 1fr); }
   .gallery__grid { grid-template-columns: repeat(3, 1fr); }
   .footer__inner { grid-template-columns: 1fr 1fr; }
+  .info__grid { grid-template-columns: 1fr; max-width: 460px; margin-inline: auto; }
 }
 
 @media (max-width: 680px) {

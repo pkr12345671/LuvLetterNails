@@ -73,6 +73,12 @@ of **`js/main.js`** — no other changes needed:
 - **`slotMinutes`** — spacing between start times (e.g. 30).
 - **`leadHours`** — how far in advance someone must book (e.g. 24).
 - **`maxDaysAhead`** — how far out the calendar opens (e.g. 60).
+- **`deposit`** — the deposit amount shown at the confirmation step (e.g. 20).
+- **`addons`** — the step-2 "Add to Appointment" options (length, nail type,
+  design level, removals, repairs, fees, etc.). Each has a `group`, `name`,
+  `price` (± dollars), and `min` (± minutes). Selecting add-ons updates the
+  appointment length **and** the price estimate, and the longer length is
+  honored when generating time slots.
 
 The calendar greys out days with no availability and only offers slots that fit
 the selected service's duration within your hours.

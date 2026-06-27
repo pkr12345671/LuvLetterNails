@@ -256,17 +256,28 @@
       <p class="eyebrow">By appointment</p>
       <h2 class="section-title">Book your seat in the studio</h2>
       <p class="section-lead">
-        Pick a service, choose a date and time that work for you, and send your
-        request. I&rsquo;ll confirm by text or email and share a deposit link to
+        Pick a service and any add-ons, choose a date and time, and send your
+        request. I&rsquo;ll confirm by text or email and share your deposit link to
         lock it in. Sealed with love.
       </p>
+
+      <!-- Before you book — the real process -->
+      <div class="book__notice reveal">
+        <p><strong>Before you book, DM me on Instagram
+          <a href="https://www.instagram.com/luvletternails" target="_blank" rel="noopener">@luvletternails</a>
+          for a consultation.</strong> We&rsquo;ll go over your design and I&rsquo;ll tell you
+          exactly what to select here. Appointments booked without a DM consultation
+          are cancelled &amp; refunded. No time slot is reserved until you book and pay
+          the <strong>$20 non-refundable deposit</strong> (it comes off your total).</p>
+      </div>
 
       <div class="booker reveal" id="booker">
         <!-- progress -->
         <ol class="booker__steps">
           <li data-step="1" class="is-active"><span>1</span> Service</li>
-          <li data-step="2"><span>2</span> Date &amp; time</li>
-          <li data-step="3"><span>3</span> Your details</li>
+          <li data-step="2"><span>2</span> Add-ons</li>
+          <li data-step="3"><span>3</span> Date &amp; time</li>
+          <li data-step="4"><span>4</span> Details</li>
         </ol>
 
         <!-- Step 1: pick a service -->
@@ -274,10 +285,19 @@
           <div class="svc-list" id="svcList"><!-- services injected by JS --></div>
         </div>
 
-        <!-- Step 2: pick date + time -->
+        <!-- Step 2: add-ons -->
         <div class="booker__panel" data-panel="2" hidden>
           <button class="booker__back" type="button" data-back="1">← Change service</button>
-          <p class="booker__chosen" id="chosenService"></p>
+          <p class="booker__chosen js-chosen"></p>
+          <p class="addons__hint">Optional — add only what we discussed in your DM consultation.</p>
+          <div class="addon-list" id="addonList"><!-- add-ons injected by JS --></div>
+          <button class="btn btn--primary btn--block" type="button" id="addonsNext">Continue to date &amp; time →</button>
+        </div>
+
+        <!-- Step 3: pick date + time -->
+        <div class="booker__panel" data-panel="3" hidden>
+          <button class="booker__back" type="button" data-back="2">← Back to add-ons</button>
+          <p class="booker__chosen js-chosen"></p>
           <div class="cal">
             <div class="cal__head">
               <button class="cal__nav" id="calPrev" type="button" aria-label="Previous month">‹</button>
@@ -295,9 +315,9 @@
           </div>
         </div>
 
-        <!-- Step 3: details -->
-        <div class="booker__panel" data-panel="3" hidden>
-          <button class="booker__back" type="button" data-back="2">← Change date/time</button>
+        <!-- Step 4: details -->
+        <div class="booker__panel" data-panel="4" hidden>
+          <button class="booker__back" type="button" data-back="3">← Change date/time</button>
           <form class="postcard booker__form" id="bookingForm" novalidate>
             <p class="postcard__stamp" aria-hidden="true">appt<br />card</p>
             <h3 class="postcard__title script">Almost sealed</h3>
@@ -341,16 +361,18 @@
       </figure>
       <div class="about__text reveal">
         <p class="eyebrow">The artist</p>
-        <h2 class="section-title">Every set is signed with love</h2>
+        <h2 class="section-title">Hey, I&rsquo;m Jaz</h2>
         <p>
-          Luv Letter began with a simple belief: a great set of nails feels like
-          receiving a love letter — personal, thoughtful, and just for you. As a
-          licensed nail artist, I hand-craft every press-on set and pour the same
-          care into every in-person appointment.
+          I&rsquo;m a licensed nail artist based in <strong>Tallahassee, FL</strong>, with
+          over 5 years of nail experience. I specialize in nail growth and
+          <strong>maximalist art</strong> — lots of color, texture, sculpted and
+          hand-drawn elements.
         </p>
         <p>
-          Whether you&rsquo;re across the country or right around the corner,
-          there&rsquo;s a little envelope here with your name on it.
+          Thank you for choosing me to be your nail tech! I can&rsquo;t wait to meet you
+          and make some fun art together. Whether you&rsquo;re here for a custom set in
+          the studio or made-to-order press-ons shipped to your door, there&rsquo;s a
+          little envelope here with your name on it.
         </p>
         <a class="link-arrow" href="https://www.instagram.com/luvletternails" target="_blank" rel="noopener">Follow @luvletternails →</a>
       </div>
@@ -370,39 +392,93 @@
       </div>
     </section>
 
-    <!-- ===== FAQ ===== -->
-    <section class="faq" id="faq">
+    <!-- ===== Info: hours / location / deposit ===== -->
+    <section class="info" id="info">
       <p class="eyebrow">Good to know</p>
-      <h2 class="section-title">Care &amp; questions</h2>
+      <h2 class="section-title">Hours, location &amp; deposit</h2>
+      <div class="info__grid">
+        <div class="info__card reveal">
+          <h3>Hours</h3>
+          <ul class="info__hours">
+            <li><span>Sunday</span><span>11–7</span></li>
+            <li><span>Monday</span><span>Closed</span></li>
+            <li><span>Tuesday</span><span>9–9</span></li>
+            <li><span>Wednesday</span><span>9–9</span></li>
+            <li><span>Thursday</span><span>9–9</span></li>
+            <li><span>Friday</span><span>Closed</span></li>
+            <li><span>Saturday</span><span>11–7</span></li>
+          </ul>
+        </div>
+        <div class="info__card reveal">
+          <h3>Location</h3>
+          <p>Home-based studio in <strong>Tallahassee, FL</strong>, near Mission Rd.
+            The exact location is sent <strong>24 hours before</strong> your appointment.</p>
+          <p>No waiting room — please arrive right at your appointment time (wait in
+            your car if you&rsquo;re early).</p>
+        </div>
+        <div class="info__card reveal">
+          <h3>Deposit &amp; payment</h3>
+          <p>A <strong>$20 non-refundable deposit</strong> is required to book, paid
+            online by card. It comes off your total; the rest is due at the end of
+            your appointment.</p>
+          <p>Final payment: cash, card (tap or on file), or tap (Apple&nbsp;Pay,
+            Samsung&nbsp;Pay, etc.).</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== FAQ / policies ===== -->
+    <section class="faq" id="faq">
+      <p class="eyebrow">Before you book</p>
+      <h2 class="section-title">Policies &amp; questions</h2>
       <div class="faq__list">
         <details class="faq__item">
-          <summary>How do the press-ons fit?</summary>
-          <p>Each set is made to order and sized to you. If you don&rsquo;t know your
-            sizes, request a sizing kit on the form and we&rsquo;ll get you measured before
-            we make your set.</p>
+          <summary>How do I book an appointment?</summary>
+          <p>First, <a href="https://www.instagram.com/luvletternails" target="_blank" rel="noopener">DM me on Instagram</a>
+            for a consultation — we&rsquo;ll go over your design and I&rsquo;ll tell you exactly
+            what to select. Then book in the <a href="#book">Book</a> section and pay your
+            $20 deposit. Appointments booked without a DM consultation are cancelled &amp;
+            refunded, and no slot is reserved until the deposit is paid. For a quick
+            booking, send your design/inspo pic, desired date &amp; time, and whether you
+            need a removal.</p>
+        </details>
+        <details class="faq__item">
+          <summary>What kind of designs do you do?</summary>
+          <p>I specialize in <strong>maximalist, six+ swatch designs</strong> with lots of
+            color, texture, and sculpted &amp; hand-drawn elements. One-color / simple sets
+            are currently offered to regular clients only. Not sure if your design fits?
+            Check my IG feed and inspo highlights to compare.</p>
+        </details>
+        <details class="faq__item">
+          <summary>Rescheduling, cancellations &amp; fees</summary>
+          <p>Please notify me <strong>at least 24 hours before</strong> your appointment
+            through DM to reschedule or cancel. You may reschedule twice with the same
+            deposit; after that you&rsquo;ll need to cancel and rebook. Last-minute
+            reschedules are charged 25% of the service price, last-minute cancellations
+            50%.</p>
+        </details>
+        <details class="faq__item">
+          <summary>Late arrivals &amp; no-shows</summary>
+          <p>There&rsquo;s a 15-minute grace period. After 15 minutes with no communication,
+            a <strong>$10 late fee</strong> applies. After 30 minutes with no
+            communication it&rsquo;s a no-show, charged 100% of the service price (and you may
+            be banned from booking). Appointments starting at 8&nbsp;PM or later are late-night
+            appointments and include a <strong>$15</strong> late-night fee.</p>
+        </details>
+        <details class="faq__item">
+          <summary>Sickness, masks &amp; guests</summary>
+          <p>If you have any symptoms of sickness — or have been around someone who&rsquo;s
+            sick — please don&rsquo;t come in; message me and we&rsquo;ll reschedule with no charge.
+            Showing up sick means being turned away and charged the cancellation fee.
+            Masks are optional but highly recommended (I have disposables if you need one).
+            Please <strong>don&rsquo;t bring additional guests</strong> unless they&rsquo;re booked
+            for a service or I&rsquo;ve agreed beforehand.</p>
         </details>
         <details class="faq__item">
           <summary>Are the press-ons reusable?</summary>
           <p>Yes — built with sturdy builder-gel layers so, with proper care and the
-            right adhesive, they can be worn again and again.</p>
-        </details>
-        <details class="faq__item">
-          <summary>How long does shipping take?</summary>
-          <p>Sets are hand-crafted to order, so production time plus shipping applies.
-            We&rsquo;ll confirm the current turnaround when we reply to your request.
-            <em>(Final timelines confirmed by the artist.)</em></p>
-        </details>
-        <details class="faq__item">
-          <summary>How do in-person appointments work?</summary>
-          <p>Send an appointment request in the <a href="#book">Book</a> section with your
-            service and a couple of times that work for you. I&rsquo;ll reply to confirm your
-            spot and send a deposit link to lock it in — it&rsquo;s a request, not an instant
-            booking, so your time isn&rsquo;t held until I confirm.</p>
-        </details>
-        <details class="faq__item">
-          <summary>What&rsquo;s your cancellation policy?</summary>
-          <p><em>Placeholder — confirm with the artist.</em> Deposits, cancellations, and
-            rescheduling terms will be shared when I confirm your appointment.</p>
+            right adhesive, they can be worn again and again. Not sure of your sizes?
+            Add <em>Press-Ons Sizing</em> when you book.</p>
         </details>
       </div>
     </section>

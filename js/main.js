@@ -53,18 +53,70 @@ const BOOKING = {
   // Weekly hours by weekday (0=Sun … 6=Sat). Each day is a list of [open, close]
   // ranges in 24h "HH:MM". An empty list means closed that day.
   hours: {
-    0: [],                       // Sunday — closed
-    1: [],                       // Monday — closed
-    2: [["10:00", "18:00"]],     // Tuesday
-    3: [["10:00", "18:00"]],     // Wednesday
-    4: [["10:00", "19:00"]],     // Thursday
-    5: [["10:00", "19:00"]],     // Friday
-    6: [["09:00", "16:00"]],     // Saturday
+    0: [["11:00", "19:00"]],     // Sunday   11–7
+    1: [],                       // Monday   — closed
+    2: [["09:00", "21:00"]],     // Tuesday  9–9
+    3: [["09:00", "21:00"]],     // Wednesday 9–9
+    4: [["09:00", "21:00"]],     // Thursday 9–9
+    5: [],                       // Friday   — closed
+    6: [["11:00", "19:00"]],     // Saturday 11–7
   },
 
   slotMinutes: 30,   // spacing between appointment start times
   leadHours: 24,     // earliest you can request from "now"
   maxDaysAhead: 60,  // how far ahead the calendar opens
+  deposit: 20,       // non-refundable deposit (shown at confirmation)
+
+  // Add-ons shown in step 2 (after picking a service). Selecting one adjusts the
+  // appointment length (min, can be negative) and the price estimate (price, $).
+  addons: [
+    { group: "Length", name: "XS", price: -5, min: 0 },
+    { group: "Length", name: "Short", price: 0, min: 0 },
+    { group: "Length", name: "Medium", price: 5, min: 0 },
+    { group: "Length", name: "Long", price: 10, min: 0 },
+    { group: "Length", name: "XL", price: 20, min: 30 },
+    { group: "Length", name: "XXL", price: 25, min: 30 },
+
+    { group: "Nail type", name: "Gel polish", price: -20, min: -30 },
+    { group: "Nail type", name: "BIAB", price: 0, min: -30 },
+    { group: "Nail type", name: "Gel-X", price: 0, min: 0 },
+    { group: "Nail type", name: "Sculpted", price: 10, min: 30 },
+
+    { group: "Design level", name: "Level 1", price: 0, min: 30 },
+    { group: "Design level", name: "Level 2", price: 15, min: 60 },
+    { group: "Design level", name: "Level 3", price: 30, min: 90 },
+    { group: "Design level", name: "Level 4", price: 55, min: 120 },
+
+    { group: "Maintenance", name: "Fill (2–4 wks)", price: -5, min: 0 },
+    { group: "Maintenance", name: "Rebalance (5–6 wks)", price: 0, min: 0 },
+    { group: "Maintenance", name: "Reshaping", price: 5, min: 0 },
+    { group: "Maintenance", name: "Press-ons sizing", price: 0, min: 20 },
+
+    { group: "Removal (my work)", name: "Regularz removal", price: 0, min: 60 },
+    { group: "Removal (my work)", name: "Gel polish", price: 5, min: 30 },
+    { group: "Removal (my work)", name: "Gel-X / soft gel", price: 5, min: 60 },
+    { group: "Removal (my work)", name: "Hard gel / polygel", price: 10, min: 60 },
+    { group: "Removal (my work)", name: "Press-ons", price: 5, min: 30 },
+
+    { group: "Removal (other tech)", name: "Gel polish", price: 5, min: 30 },
+    { group: "Removal (other tech)", name: "Gel-X / soft gel", price: 10, min: 60 },
+    { group: "Removal (other tech)", name: "Hard gel / polygel", price: 15, min: 60 },
+    { group: "Removal (other tech)", name: "Acrylic / dip", price: 20, min: 60 },
+
+    { group: "Repair", name: "1 nail", price: 5, min: 15 },
+    { group: "Repair", name: "2 nails", price: 10, min: 30 },
+    { group: "Repair", name: "3 nails", price: 15, min: 45 },
+    { group: "Repair", name: "4 nails", price: 20, min: 60 },
+
+    { group: "Replacement", name: "1 nail", price: 10, min: 15 },
+    { group: "Replacement", name: "2 nails", price: 15, min: 30 },
+    { group: "Replacement", name: "3 nails", price: 20, min: 45 },
+    { group: "Replacement", name: "4 nails", price: 25, min: 60 },
+
+    { group: "Fees", name: "Before/after hours", price: 30, min: 0 },
+    { group: "Fees", name: "Late night", price: 15, min: 0 },
+    { group: "Fees", name: "Off-day", price: 50, min: 0 },
+  ],
 };
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -237,7 +289,7 @@ function initBooker() {
   const root = document.getElementById("booker");
   if (!root) return;
 
-  const state = { service: null, date: null, time: null };
+  const state = { service: null, addons: [], date: null, time: null };
   const panels = root.querySelectorAll(".booker__panel");
   const steps = root.querySelectorAll(".booker__steps li");
 
@@ -259,11 +311,21 @@ function initBooker() {
   const today = new Date(); today.setHours(0, 0, 0, 0);
   const maxDate = new Date(today); maxDate.setDate(maxDate.getDate() + BOOKING.maxDaysAhead);
 
+  // appointment length + price include any selected add-ons
+  const apptDuration = () => (state.service ? state.service.min : 0) + state.addons.reduce((s, a) => s + a.min, 0);
+  const apptAddonPrice = () => state.addons.reduce((s, a) => s + a.price, 0);
+  const priceEstimate = () => {
+    const base = parseFloat(String(state.service.price).replace(/[^0-9.]/g, ""));
+    const addon = apptAddonPrice();
+    if (isNaN(base)) return "varies";
+    return `~$${base + addon}`;
+  };
+
   const slotsFor = (date) => {
     if (!state.service) return [];
     const ranges = BOOKING.hours[date.getDay()] || [];
     const lead = new Date(Date.now() + BOOKING.leadHours * 3600e3);
-    const dur = state.service.min;
+    const dur = apptDuration();
     const out = [];
     for (const [open, close] of ranges) {
       for (let t = toMin(open); t + dur <= toMin(close); t += BOOKING.slotMinutes) {
@@ -304,20 +366,62 @@ function initBooker() {
   svcList.querySelectorAll(".svc").forEach((btn) => {
     btn.addEventListener("click", () => {
       state.service = BOOKING.services[+btn.dataset.svc];
-      state.date = null; state.time = null;
-      document.getElementById("chosenService").textContent =
-        `${state.service.name} · ${fmtDur(state.service.min)} · ${state.service.price}`;
-      // open the first month that has availability
-      view = new Date(); view.setDate(1);
-      let guard = 0;
-      while (!monthHasOpen(view) && view < maxDate && guard++ < 14) view.setMonth(view.getMonth() + 1);
-      slotsWrap.hidden = true;
-      renderCal();
+      state.addons = []; state.date = null; state.time = null;
+      renderAddons();
+      updateChosen();
       show(2);
     });
   });
 
-  /* ----- Step 2: calendar + slots ----- */
+  /* ----- Step 2: add-ons ----- */
+  const addonList = document.getElementById("addonList");
+  const chosenEls = root.querySelectorAll(".js-chosen");
+
+  const fmtDelta = (a) => {
+    const parts = [];
+    if (a.price) parts.push(`${a.price > 0 ? "+" : "−"}$${Math.abs(a.price)}`);
+    if (a.min) parts.push(`${a.min > 0 ? "+" : "−"}${fmtDur(Math.abs(a.min))}`);
+    return parts.join(" · ") || "included";
+  };
+  const updateChosen = () => {
+    if (!state.service) return;
+    const est = priceEstimate();
+    const txt = `${state.service.name} · ${fmtDur(apptDuration())}${est ? " · " + est : ""}`;
+    chosenEls.forEach((el) => (el.textContent = txt));
+  };
+  function renderAddons() {
+    const groups = [];
+    BOOKING.addons.forEach((a) => { if (!groups.includes(a.group)) groups.push(a.group); });
+    addonList.innerHTML = groups.map((g) => {
+      const chips = BOOKING.addons
+        .map((a, i) => ({ a, i }))
+        .filter((x) => x.a.group === g)
+        .map(({ a, i }) => `<button class="addon" type="button" data-addon="${i}"><span class="addon__name">${a.name}</span><span class="addon__delta">${fmtDelta(a)}</span></button>`)
+        .join("");
+      return `<div class="addon-group"><h5 class="addon-group__title">${g}</h5><div class="addon-group__chips">${chips}</div></div>`;
+    }).join("");
+    addonList.querySelectorAll(".addon").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const a = BOOKING.addons[+btn.dataset.addon];
+        const idx = state.addons.indexOf(a);
+        if (idx >= 0) { state.addons.splice(idx, 1); btn.classList.remove("is-on"); }
+        else { state.addons.push(a); btn.classList.add("is-on"); }
+        updateChosen();
+      });
+    });
+  }
+
+  document.getElementById("addonsNext").addEventListener("click", () => {
+    state.date = null; state.time = null;
+    view = new Date(); view.setDate(1);
+    let guard = 0;
+    while (!monthHasOpen(view) && view < maxDate && guard++ < 14) view.setMonth(view.getMonth() + 1);
+    slotsWrap.hidden = true;
+    renderCal();
+    show(3);
+  });
+
+  /* ----- Step 3: calendar + slots ----- */
   let view = new Date(); view.setDate(1);
   const calGrid = document.getElementById("calGrid");
   const calTitle = document.getElementById("calTitle");
@@ -360,7 +464,7 @@ function initBooker() {
     slotsGrid.innerHTML = list.map((t) => `<button class="slot" type="button" data-time="${t}">${fmt12(t)}</button>`).join("");
     slotsWrap.hidden = false;
     slotsGrid.querySelectorAll(".slot").forEach((b) => {
-      b.addEventListener("click", () => { state.time = b.dataset.time; renderSummary(); show(3); });
+      b.addEventListener("click", () => { state.time = b.dataset.time; renderSummary(); show(4); });
     });
     slotsWrap.scrollIntoView({ behavior: "smooth", block: "nearest" });
   }
@@ -368,15 +472,20 @@ function initBooker() {
   calPrev.addEventListener("click", () => { view.setMonth(view.getMonth() - 1); renderCal(); });
   calNext.addEventListener("click", () => { view.setMonth(view.getMonth() + 1); renderCal(); });
 
-  /* ----- Step 3: summary + submit ----- */
+  /* ----- Step 4: summary + submit ----- */
   const summary = document.getElementById("bookSummary");
   function renderSummary() {
+    const addonRows = state.addons
+      .map((a) => `<div class="summary-row summary-row--sub"><span>+ ${a.group}: ${a.name}</span><strong>${fmtDelta(a)}</strong></div>`)
+      .join("");
     summary.innerHTML = `
       <div class="summary-row"><span>Service</span><strong>${state.service.name}</strong></div>
-      <div class="summary-row"><span>Duration</span><strong>${fmtDur(state.service.min)}</strong></div>
-      <div class="summary-row"><span>Price</span><strong>${state.service.price}</strong></div>
+      ${addonRows}
+      <div class="summary-row"><span>Total time</span><strong>${fmtDur(apptDuration())}</strong></div>
+      <div class="summary-row"><span>Est. price</span><strong>${priceEstimate()}</strong></div>
       <div class="summary-row"><span>Date</span><strong>${longDate(state.date)}</strong></div>
-      <div class="summary-row"><span>Time</span><strong>${fmt12(state.time)}</strong></div>`;
+      <div class="summary-row"><span>Time</span><strong>${fmt12(state.time)}</strong></div>
+      <div class="summary-row summary-row--note"><span>Deposit at booking</span><strong>$${BOOKING.deposit}</strong></div>`;
   }
 
   root.querySelectorAll("[data-back]").forEach((b) =>
@@ -397,10 +506,13 @@ function initBooker() {
       say("Please add your name and a valid email so I can confirm. 💌", "err"); return;
     }
     data.set("service", state.service.name);
-    data.set("duration", fmtDur(state.service.min));
-    data.set("price", state.service.price);
+    if (state.addons.length) data.set("addons", state.addons.map((a) => `${a.group}: ${a.name}`).join(", "));
+    data.set("duration", fmtDur(apptDuration()));
+    data.set("base_price", state.service.price);
+    data.set("estimate", priceEstimate());
     data.set("date", longDate(state.date));
     data.set("time", fmt12(state.time));
+    data.set("deposit", `$${BOOKING.deposit}`);
 
     const result = await deliverRequest(data, "Appointment request", name, say);
     if (result === "sent") {
