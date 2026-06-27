@@ -321,23 +321,29 @@ section > * { max-width: var(--maxw); margin-inline: auto; }
 }
 
 .stamp {
-  --perf: var(--cream);
   position: relative;
   font-family: var(--sans);
   cursor: pointer;
   border: 0;
-  padding: 9px;
-  background: #fff;
-  /* perforated stamp edge via radial dots punched out of the border */
-  -webkit-mask:
-    radial-gradient(circle 5px at 0 0, transparent 4px, #000 4.5px) 0 0 / 13px 13px;
-  mask:
-    radial-gradient(circle 5px, transparent 4px, #000 4.5px) -6.5px -6.5px / 13px 13px;
+  padding: 10px;
+  background: transparent;
   box-shadow: 0 4px 12px rgba(43,36,48,0.12);
   transition: transform 0.22s var(--ease), box-shadow 0.22s var(--ease);
   display: flex;
   flex-direction: column;
 }
+/* White "paper" with perforated edge — sits BEHIND the art, so the punched
+   holes only read along the stamp's perimeter (center holes hide under the img). */
+.stamp::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: #fff;
+  -webkit-mask: radial-gradient(circle 4.5px, transparent 3.6px, #000 4.1px) -6.5px -6.5px / 13px 13px;
+          mask: radial-gradient(circle 4.5px, transparent 3.6px, #000 4.1px) -6.5px -6.5px / 13px 13px;
+}
+.stamp > * { position: relative; z-index: 1; }
 .stamp:hover, .stamp:focus-visible { transform: translateY(-6px) rotate(-1.5deg); box-shadow: var(--shadow-md); outline: none; }
 .stamp.is-picked { transform: translateY(-6px) rotate(-1.5deg); box-shadow: 0 0 0 3px var(--red), var(--shadow-md); }
 
@@ -373,6 +379,7 @@ section > * { max-width: var(--maxw); margin-inline: auto; }
 .stamp::after {
   content: "PICKED";
   position: absolute;
+  z-index: 2;
   top: 42%; left: 50%;
   transform: translate(-50%, -50%) rotate(-16deg);
   font-family: var(--serif);

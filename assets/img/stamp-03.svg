@@ -1,8 +1,21 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 750" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Cafe au Lait placeholder">
-  <rect width="600" height="750" fill="#e8b4b8"/>
-  <rect x="6" y="6" width="588" height="738" fill="none" stroke="#b23a48" stroke-opacity="0.35" stroke-width="2" stroke-dasharray="6 6"/>
-  <g fill="#b23a48" fill-opacity="0.75" font-family="Georgia, serif" text-anchor="middle">
-    <text x="300" y="371" font-size="37" font-style="italic">Cafe au Lait</text>
-    <text x="300" y="412" font-size="20" fill-opacity="0.6">press-on design · 4:5</text>
-  </g>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 750" role="img" aria-label="Press-on nail design">
+  <defs>
+    <linearGradient id="stamp03g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#cda483"/>
+      <stop offset="100%" stop-color="#8c6850"/>
+    </linearGradient>
+    <radialGradient id="stamp03gbg" cx="50%" cy="38%" r="75%">
+      <stop offset="0%" stop-color="#fffdf9"/>
+      <stop offset="100%" stop-color="#ece0d1"/>
+    </radialGradient>
+  </defs>
+  <rect width="600" height="750" fill="url(#stamp03gbg)"/>
+  <rect x="16" y="16" width="568" height="718" fill="none" stroke="#6f4f3c" stroke-opacity="0.35" stroke-width="2"/>
+  <text x="34" y="50" font-family="Georgia,serif" font-size="26" fill="#6f4f3c" opacity="0.5">✶</text>
+  <text x="566" y="724" text-anchor="end" font-family="Georgia,serif" font-size="26" fill="#6f4f3c" opacity="0.5">✶</text>
+  <g transform="translate(122 512) rotate(-15)"><ellipse cx="0" cy="6" rx="29" ry="9" fill="#000" opacity="0.06"/><path d="M -29 0 L -29 -99 C -29 -135 -15.950000000000001 -150 0 -150 C 15.950000000000001 -150 29 -135 29 -99 L 29 0 Z" fill="url(#stamp03g)" stroke="#6f4f3c" stroke-width="1.5"/><ellipse cx="0" cy="-8" rx="23" ry="9" fill="#ffffff" opacity="0.25"/><path d="M -15.950000000000001 -132 C -24.65 -82.5 -20.299999999999997 -30 -13.05 -6 L -3.48 -8 C -9.28 -37.5 -11.600000000000001 -90 -5.22 -135 Z" fill="#ffffff" opacity="0.18"/><path d="M -15.950000000000001 -132 C -24.65 -82.5 -20.299999999999997 -30 -13.05 -6 L -3.48 -8 C -9.28 -37.5 -11.600000000000001 -90 -5.22 -135 Z" fill="#ffffff" opacity="0.18"/></g>
+  <g transform="translate(211 520) rotate(-7)"><ellipse cx="0" cy="6" rx="29" ry="9" fill="#000" opacity="0.06"/><path d="M -29 0 L -29 -117.48 C -29 -160.20000000000002 -15.950000000000001 -178 0 -178 C 15.950000000000001 -178 29 -160.20000000000002 29 -117.48 L 29 0 Z" fill="url(#stamp03g)" stroke="#6f4f3c" stroke-width="1.5"/><ellipse cx="0" cy="-8" rx="23" ry="9" fill="#ffffff" opacity="0.25"/><path d="M -15.950000000000001 -156.64000000000001 C -24.65 -97.9 -20.299999999999997 -35.6 -13.05 -6 L -3.48 -8 C -9.28 -44.5 -11.600000000000001 -106.8 -5.22 -160.20000000000002 Z" fill="#ffffff" opacity="0.18"/><path d="M -15.950000000000001 -156.64000000000001 C -24.65 -97.9 -20.299999999999997 -35.6 -13.05 -6 L -3.48 -8 C -9.28 -44.5 -11.600000000000001 -106.8 -5.22 -160.20000000000002 Z" fill="#ffffff" opacity="0.18"/></g>
+  <g transform="translate(300 524) rotate(0)"><ellipse cx="0" cy="6" rx="29" ry="9" fill="#000" opacity="0.06"/><path d="M -29 0 L -29 -133.32 C -29 -181.8 -15.950000000000001 -202 0 -202 C 15.950000000000001 -202 29 -181.8 29 -133.32 L 29 0 Z" fill="url(#stamp03g)" stroke="#6f4f3c" stroke-width="1.5"/><ellipse cx="0" cy="-8" rx="23" ry="9" fill="#ffffff" opacity="0.25"/><path d="M -15.950000000000001 -177.76 C -24.65 -111.10000000000001 -20.299999999999997 -40.400000000000006 -13.05 -6 L -3.48 -8 C -9.28 -50.5 -11.600000000000001 -121.19999999999999 -5.22 -181.8 Z" fill="#ffffff" opacity="0.18"/><path d="M -15.950000000000001 -177.76 C -24.65 -111.10000000000001 -20.299999999999997 -40.400000000000006 -13.05 -6 L -3.48 -8 C -9.28 -50.5 -11.600000000000001 -121.19999999999999 -5.22 -181.8 Z" fill="#ffffff" opacity="0.18"/><path d="M -23 -92.92 Q -8 -117.16 6 -92.92 T 23 -92.92" fill="none" stroke="#f3e7d8" stroke-width="6" stroke-linecap="round" opacity="0.85"/></g>
+  <g transform="translate(389 520) rotate(7)"><ellipse cx="0" cy="6" rx="29" ry="9" fill="#000" opacity="0.06"/><path d="M -29 0 L -29 -117.48 C -29 -160.20000000000002 -15.950000000000001 -178 0 -178 C 15.950000000000001 -178 29 -160.20000000000002 29 -117.48 L 29 0 Z" fill="url(#stamp03g)" stroke="#6f4f3c" stroke-width="1.5"/><ellipse cx="0" cy="-8" rx="23" ry="9" fill="#ffffff" opacity="0.25"/><path d="M -15.950000000000001 -156.64000000000001 C -24.65 -97.9 -20.299999999999997 -35.6 -13.05 -6 L -3.48 -8 C -9.28 -44.5 -11.600000000000001 -106.8 -5.22 -160.20000000000002 Z" fill="#ffffff" opacity="0.18"/><path d="M -15.950000000000001 -156.64000000000001 C -24.65 -97.9 -20.299999999999997 -35.6 -13.05 -6 L -3.48 -8 C -9.28 -44.5 -11.600000000000001 -106.8 -5.22 -160.20000000000002 Z" fill="#ffffff" opacity="0.18"/></g>
+  <g transform="translate(478 512) rotate(15)"><ellipse cx="0" cy="6" rx="29" ry="9" fill="#000" opacity="0.06"/><path d="M -29 0 L -29 -99 C -29 -135 -15.950000000000001 -150 0 -150 C 15.950000000000001 -150 29 -135 29 -99 L 29 0 Z" fill="url(#stamp03g)" stroke="#6f4f3c" stroke-width="1.5"/><ellipse cx="0" cy="-8" rx="23" ry="9" fill="#ffffff" opacity="0.25"/><path d="M -15.950000000000001 -132 C -24.65 -82.5 -20.299999999999997 -30 -13.05 -6 L -3.48 -8 C -9.28 -37.5 -11.600000000000001 -90 -5.22 -135 Z" fill="#ffffff" opacity="0.18"/><path d="M -15.950000000000001 -132 C -24.65 -82.5 -20.299999999999997 -30 -13.05 -6 L -3.48 -8 C -9.28 -37.5 -11.600000000000001 -90 -5.22 -135 Z" fill="#ffffff" opacity="0.18"/></g>
 </svg>
