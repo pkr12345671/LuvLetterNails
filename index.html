@@ -254,86 +254,84 @@
         <img class="book__seal" src="assets/svg/wax-seal.svg" alt="Luv Letter wax seal" width="160" height="160" />
       </div>
       <p class="eyebrow">By appointment</p>
-      <h2 class="section-title">Request your seat in the studio</h2>
+      <h2 class="section-title">Book your seat in the studio</h2>
       <p class="section-lead">
-        Send your appointment request below — your service and a couple of times
-        that work for you. I&rsquo;ll write back to confirm your spot and share a
-        deposit link to lock it in. Sealed with love.
+        Pick a service, choose a date and time that work for you, and send your
+        request. I&rsquo;ll confirm by text or email and share a deposit link to
+        lock it in. Sealed with love.
       </p>
 
-      <form class="postcard book__form reveal" id="bookingForm" novalidate>
-        <p class="postcard__stamp" aria-hidden="true">appt<br />card</p>
-        <h3 class="postcard__title script">An appointment request</h3>
+      <div class="booker reveal" id="booker">
+        <!-- progress -->
+        <ol class="booker__steps">
+          <li data-step="1" class="is-active"><span>1</span> Service</li>
+          <li data-step="2"><span>2</span> Date &amp; time</li>
+          <li data-step="3"><span>3</span> Your details</li>
+        </ol>
 
-        <div class="field-row">
-          <div class="field">
-            <label for="b-name">Your name</label>
-            <input id="b-name" name="name" type="text" autocomplete="name" required />
-          </div>
-          <div class="field">
-            <label for="b-phone">Phone (for texts)</label>
-            <input id="b-phone" name="phone" type="tel" autocomplete="tel" />
-          </div>
-        </div>
-        <div class="field">
-          <label for="b-email">Email</label>
-          <input id="b-email" name="email" type="email" autocomplete="email" required />
-        </div>
-        <div class="field">
-          <label for="b-service">Service</label>
-          <select id="b-service" name="service">
-            <option value="">Choose…</option>
-            <option>Full custom set</option>
-            <option>Fill / refresh</option>
-            <option>Gel manicure</option>
-            <option>Nail art add-on</option>
-            <option>Soak-off / removal</option>
-            <option>Not sure — help me pick</option>
-          </select>
-        </div>
-        <div class="field-row">
-          <div class="field">
-            <label for="b-date1">Preferred date</label>
-            <input id="b-date1" name="preferred_date_1" type="date" />
-          </div>
-          <div class="field">
-            <label for="b-time1">Time of day</label>
-            <select id="b-time1" name="preferred_time_1">
-              <option value="">Choose…</option>
-              <option>Morning</option>
-              <option>Afternoon</option>
-              <option>Evening</option>
-            </select>
-          </div>
-        </div>
-        <div class="field-row">
-          <div class="field">
-            <label for="b-date2">Backup date</label>
-            <input id="b-date2" name="preferred_date_2" type="date" />
-          </div>
-          <div class="field">
-            <label for="b-time2">Backup time</label>
-            <select id="b-time2" name="preferred_time_2">
-              <option value="">Choose…</option>
-              <option>Morning</option>
-              <option>Afternoon</option>
-              <option>Evening</option>
-            </select>
-          </div>
-        </div>
-        <div class="field">
-          <label for="b-notes">Anything else? (inspo, occasion, current nails)</label>
-          <textarea id="b-notes" name="notes" rows="3" placeholder="Tell me what you have in mind…"></textarea>
+        <!-- Step 1: pick a service -->
+        <div class="booker__panel" data-panel="1">
+          <div class="svc-list" id="svcList"><!-- services injected by JS --></div>
         </div>
 
-        <button class="btn btn--primary btn--block" type="submit">Send my request</button>
-        <p class="postcard__msg" id="bookingMsg" role="status" aria-live="polite"></p>
-        <p class="postcard__fineprint">
-          This is a request, not an instant booking — I&rsquo;ll confirm your time by
-          text or email. Prefer to reach out directly? Write to
-          <a class="js-mailto" href="#">hello@luvletternails.com</a>.
-        </p>
-      </form>
+        <!-- Step 2: pick date + time -->
+        <div class="booker__panel" data-panel="2" hidden>
+          <button class="booker__back" type="button" data-back="1">← Change service</button>
+          <p class="booker__chosen" id="chosenService"></p>
+          <div class="cal">
+            <div class="cal__head">
+              <button class="cal__nav" id="calPrev" type="button" aria-label="Previous month">‹</button>
+              <span class="cal__title" id="calTitle"></span>
+              <button class="cal__nav" id="calNext" type="button" aria-label="Next month">›</button>
+            </div>
+            <div class="cal__dow" aria-hidden="true">
+              <span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span>
+            </div>
+            <div class="cal__grid" id="calGrid" role="grid"><!-- days injected by JS --></div>
+          </div>
+          <div class="slots" id="slots" hidden>
+            <p class="slots__label" id="slotsLabel"></p>
+            <div class="slots__grid" id="slotsGrid"><!-- times injected by JS --></div>
+          </div>
+        </div>
+
+        <!-- Step 3: details -->
+        <div class="booker__panel" data-panel="3" hidden>
+          <button class="booker__back" type="button" data-back="2">← Change date/time</button>
+          <form class="postcard booker__form" id="bookingForm" novalidate>
+            <p class="postcard__stamp" aria-hidden="true">appt<br />card</p>
+            <h3 class="postcard__title script">Almost sealed</h3>
+            <div class="booker__summary" id="bookSummary"><!-- summary injected by JS --></div>
+
+            <div class="field-row">
+              <div class="field">
+                <label for="b-name">Your name</label>
+                <input id="b-name" name="name" type="text" autocomplete="name" required />
+              </div>
+              <div class="field">
+                <label for="b-phone">Phone (for texts)</label>
+                <input id="b-phone" name="phone" type="tel" autocomplete="tel" />
+              </div>
+            </div>
+            <div class="field">
+              <label for="b-email">Email</label>
+              <input id="b-email" name="email" type="email" autocomplete="email" required />
+            </div>
+            <div class="field">
+              <label for="b-notes">Anything else? (inspo, occasion, current nails)</label>
+              <textarea id="b-notes" name="notes" rows="3" placeholder="Tell me what you have in mind…"></textarea>
+            </div>
+
+            <button class="btn btn--primary btn--block" type="submit">Send my request</button>
+            <p class="postcard__msg" id="bookingMsg" role="status" aria-live="polite"></p>
+            <p class="postcard__fineprint">
+              This is a request, not an instant booking — I&rsquo;ll confirm your time by
+              text or email. Prefer to reach out directly? Write to
+              <a class="js-mailto" href="#">hello@luvletternails.com</a>.
+            </p>
+          </form>
+        </div>
+      </div>
     </section>
 
     <!-- ===== About ===== -->

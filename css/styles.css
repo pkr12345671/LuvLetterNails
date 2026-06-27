@@ -503,11 +503,125 @@ section > * { max-width: var(--maxw); margin-inline: auto; }
 .book__seal { width: clamp(100px, 14vw, 150px); filter: drop-shadow(0 10px 16px rgba(126,38,48,0.3)); animation: seal-in 0.8s var(--ease) both; }
 @keyframes seal-in { from { transform: scale(1.3) rotate(-12deg); opacity: 0; } to { transform: scale(1) rotate(-6deg); opacity: 1; } }
 
-.book__form {
-  max-width: 640px;
-  margin: 2.4rem auto 0;
+/* ----- Scheduler (booker) ----- */
+.booker {
+  max-width: 680px;
+  margin: 2.2rem auto 0;
   text-align: left;
+  background: var(--paper);
+  border: 1px solid var(--paper-edge);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-md);
+  padding: clamp(1.3rem, 3.5vw, 2rem);
 }
+
+/* progress steps */
+.booker__steps {
+  display: flex;
+  gap: 0.5rem;
+  list-style: none;
+  margin: 0 0 1.6rem;
+  padding: 0 0 1rem;
+  border-bottom: 1px dashed var(--paper-edge);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--ink-soft);
+  flex-wrap: wrap;
+}
+.booker__steps li { display: flex; align-items: center; gap: 0.4rem; opacity: 0.5; }
+.booker__steps li::after { content: "·"; margin-left: 0.5rem; opacity: 0.5; }
+.booker__steps li:last-child::after { content: ""; }
+.booker__steps li span {
+  display: grid; place-content: center;
+  width: 1.5rem; height: 1.5rem;
+  border-radius: 50%;
+  background: var(--blush);
+  color: var(--red-dark);
+  font-size: 0.78rem;
+}
+.booker__steps li.is-active { opacity: 1; color: var(--red); }
+.booker__steps li.is-active span { background: var(--red); color: #fff; }
+
+.booker__back {
+  background: none; border: 0; cursor: pointer;
+  color: var(--red); font-family: var(--sans); font-weight: 700; font-size: 0.9rem;
+  padding: 0 0 0.8rem;
+}
+.booker__back:hover { color: var(--red-dark); }
+.booker__chosen {
+  font-family: var(--serif); font-style: italic; font-size: 1.2rem;
+  color: var(--ink); margin: 0 0 1rem;
+}
+
+/* step 1 — services */
+.svc-cat { margin-bottom: 1.4rem; }
+.svc-cat__title {
+  font-family: var(--sans); text-transform: uppercase; letter-spacing: 0.16em;
+  font-size: 0.72rem; font-weight: 700; color: var(--red); margin: 0 0 0.6rem;
+}
+.svc {
+  width: 100%;
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  text-align: left; cursor: pointer;
+  background: #fff; border: 1.5px solid var(--paper-edge); border-radius: 12px;
+  padding: 0.85rem 1rem; margin-bottom: 0.6rem;
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s var(--ease);
+}
+.svc:hover, .svc:focus-visible { border-color: var(--rose-deep); box-shadow: var(--shadow-sm); transform: translateY(-2px); outline: none; }
+.svc__name { display: block; font-family: var(--serif); font-style: italic; font-size: 1.18rem; color: var(--ink); }
+.svc__desc { display: block; font-size: 0.86rem; color: var(--ink-soft); margin-top: 0.15rem; }
+.svc__meta { text-align: right; white-space: nowrap; }
+.svc__price { display: block; font-family: var(--serif); font-weight: 600; color: var(--red-dark); font-size: 1.1rem; }
+.svc__dur { display: block; font-size: 0.78rem; color: var(--ink-soft); }
+
+/* step 2 — calendar */
+.cal { max-width: 420px; margin: 0 auto; }
+.cal__head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.6rem; }
+.cal__title { font-family: var(--serif); font-size: 1.3rem; color: var(--ink); }
+.cal__nav {
+  width: 2.2rem; height: 2.2rem; border-radius: 50%;
+  border: 1.5px solid var(--paper-edge); background: #fff; color: var(--red);
+  font-size: 1.2rem; line-height: 1; cursor: pointer; transition: background 0.2s, border-color 0.2s;
+}
+.cal__nav:hover:not(:disabled) { background: var(--blush); border-color: var(--rose-deep); }
+.cal__nav:disabled { opacity: 0.3; cursor: not-allowed; }
+.cal__dow, .cal__grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+.cal__dow {
+  margin-bottom: 4px; text-align: center; font-size: 0.7rem; font-weight: 700;
+  letter-spacing: 0.04em; color: var(--ink-soft); text-transform: uppercase;
+}
+.cal__cell {
+  aspect-ratio: 1; display: grid; place-content: center;
+  border: 0; border-radius: 9px; background: #fff;
+  font-family: var(--sans); font-size: 0.95rem; color: var(--ink); cursor: pointer;
+  transition: background 0.18s, color 0.18s, transform 0.12s var(--ease);
+}
+.cal__cell.is-empty { background: transparent; }
+.cal__cell:not(.is-disabled):not(.is-empty):not(.is-selected):hover { background: var(--blush); transform: translateY(-1px); }
+.cal__cell.is-disabled { color: var(--ink-soft); opacity: 0.35; cursor: default; background: transparent; }
+.cal__cell.is-selected { background: var(--red); color: #fff; font-weight: 700; }
+
+/* step 2 — time slots */
+.slots { margin-top: 1.6rem; border-top: 1px dashed var(--paper-edge); padding-top: 1.2rem; }
+.slots__label { font-family: var(--serif); font-style: italic; font-size: 1.1rem; color: var(--ink); margin: 0 0 0.8rem; text-align: center; }
+.slots__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 0.55rem; }
+.slot {
+  border: 1.5px solid var(--rose-deep); background: #fff; color: var(--red-dark);
+  border-radius: 999px; padding: 0.6rem 0.4rem; font-family: var(--sans);
+  font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: background 0.18s, color 0.18s, transform 0.12s var(--ease);
+}
+.slot:hover, .slot:focus-visible { background: var(--red); color: #fff; transform: translateY(-2px); outline: none; }
+
+/* step 3 — summary */
+.booker__summary {
+  background: var(--cream); border: 1px solid var(--paper-edge); border-radius: 10px;
+  padding: 0.9rem 1.1rem; margin-bottom: 1.3rem;
+}
+.summary-row { display: flex; justify-content: space-between; gap: 1rem; padding: 0.3rem 0; font-size: 0.95rem; }
+.summary-row span { color: var(--ink-soft); }
+.summary-row strong { color: var(--ink); text-align: right; }
+.summary-row + .summary-row { border-top: 1px dashed var(--paper-edge); }
 
 /* =========================================================
    About

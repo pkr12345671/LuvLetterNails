@@ -6,9 +6,11 @@ the old Squarespace shop and Acuity scheduling page can both be retired:
 - 💅 **The Pressies** — luxury, made-to-order press-on nails (shipped), shown as
   a collectible **postage-stamp sheet** with a "Request your set" postcard form.
 - 📅 **The Appointments** — in-person visits booked through an on-site
-  **appointment request** form (anchored by a wax seal). It's a request, not an
-  instant booking: the artist confirms the time by text/email and sends a
-  deposit link to lock it in.
+  **scheduler** (anchored by a wax seal): pick a service → pick a date on the
+  calendar → pick an open time slot → enter details. Time slots are generated
+  from the artist's hours. It's a request, not an instant booking: a static
+  site can't see which slots are already taken, so the artist confirms the time
+  by text/email and sends a deposit link to lock it in.
 
 The whole site is built around the brand name being *a love letter*: an opening
 note in the hero, postage-stamp press-ons, a wax-seal booking section, and an
@@ -57,6 +59,24 @@ Both are at the top of **`js/main.js`** in the `CONFIG` object, and they cover
 > real-time availability or take deposits on its own. The artist confirms each
 > appointment and sends a deposit/pay link (Venmo/CashApp/Stripe) manually.
 
+## 📅 Editing the scheduler (services + hours)
+
+The booking calendar is driven entirely by the **`BOOKING`** object at the top
+of **`js/main.js`** — no other changes needed:
+
+- **`services`** — the list shown in step 1. Edit each entry's `name`, `min`
+  (minutes, which sizes the time slots), `price`, `desc`, and `cat` (category
+  heading). Add or remove entries freely.
+- **`hours`** — weekly availability by weekday (`0`=Sun … `6`=Sat). Each day is
+  a list of `["open","close"]` ranges in 24-hour time; an empty `[]` means
+  closed. Example: `5: [["10:00","19:00"]]` opens Friday 10am–7pm.
+- **`slotMinutes`** — spacing between start times (e.g. 30).
+- **`leadHours`** — how far in advance someone must book (e.g. 24).
+- **`maxDaysAhead`** — how far out the calendar opens (e.g. 60).
+
+The calendar greys out days with no availability and only offers slots that fit
+the selected service's duration within your hours.
+
 ## Swap in the real photos
 
 Every image is currently a labeled placeholder. See
@@ -81,7 +101,8 @@ dashboard.
 
 - [ ] Replace placeholder photos with real Instagram images.
 - [ ] Confirm press-on **design names + prices** (in `index.html`, `pressies` section).
-- [ ] Confirm **services** offered (in `index.html`, `book` section `<select>`).
+- [ ] Confirm booking **services + prices + durations** and **weekly hours**
+      (the `BOOKING` object in `js/main.js`).
 - [ ] Confirm **shipping turnaround**, **deposit amount**, and
       **appointment/cancellation policies** (FAQ + booking copy).
 - [ ] Set `CONTACT_EMAIL` and choose a `FORM_ENDPOINT` (or keep mailto).
