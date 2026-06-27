@@ -1,11 +1,14 @@
 # Luv Letter — unified website
 
-A single, refreshed website that brings the artist's two businesses together:
+A single, refreshed website that brings the artist's two businesses together so
+the old Squarespace shop and Acuity scheduling page can both be retired:
 
 - 💅 **The Pressies** — luxury, made-to-order press-on nails (shipped), shown as
   a collectible **postage-stamp sheet** with a "Request your set" postcard form.
-- 📅 **The Appointments** — in-person bookings via the existing **Acuity**
-  scheduler, embedded right on the page (anchored by a wax seal).
+- 📅 **The Appointments** — in-person visits booked through an on-site
+  **appointment request** form (anchored by a wax seal). It's a request, not an
+  instant booking: the artist confirms the time by text/email and sends a
+  deposit link to lock it in.
 
 The whole site is built around the brand name being *a love letter*: an opening
 note in the hero, postage-stamp press-ons, a wax-seal booking section, and an
@@ -17,7 +20,7 @@ framework, no server required.
 ```
 index.html          ← the whole page
 css/styles.css       ← design system + components
-js/main.js           ← nav, scroll reveals, stamp picker, form, Acuity embed
+js/main.js           ← nav, scroll reveals, stamp picker, request forms
 assets/img/          ← photos (placeholders for now — see assets/README-IMAGES.md)
 assets/svg/          ← wax seal
 favicon.svg
@@ -32,27 +35,27 @@ python3 -m http.server 8000
 # then open http://localhost:8000
 ```
 
-(Or just double-click `index.html` — though the Acuity embed and form behave
-best when served over http.)
+(Or just double-click `index.html` — though the forms behave best over http.)
 
 ## ⚙️ Two settings to make it "live"
 
-Both are at the top of **`js/main.js`** in the `CONFIG` object:
+Both are at the top of **`js/main.js`** in the `CONFIG` object, and they cover
+**both** request forms (press-on "Request your set" and the appointment request):
 
-1. **`ACUITY_URL`** — the artist's Acuity booking link. Already set to
-   `https://luvletternails.as.me/schedule/ea9af220`. Change it here if it ever
-   updates. *(Optional: in Acuity → Customize Appearance you can copy a full
-   embed snippet and paste it inside `<div id="acuityEmbed">` in `index.html`;
-   the script will leave your snippet in place.)*
+1. **`CONTACT_EMAIL`** — the artist's real inbox. Used by the email links and
+   the mailto fallback.
 
-2. **`FORM_ENDPOINT`** — where the "Request your set" form delivers.
-   - Leave it `""` and the form opens a **pre-filled email** to `CONTACT_EMAIL`
+2. **`FORM_ENDPOINT`** — where the forms deliver.
+   - Leave it `""` and a form opens a **pre-filled email** to `CONTACT_EMAIL`
      (works everywhere, no signup).
    - To collect submissions online instead, create a **free
      [Formspree](https://formspree.io) form** and paste its endpoint here, e.g.
-     `"https://formspree.io/f/abcdwxyz"`.
+     `"https://formspree.io/f/abcdwxyz"`. Both forms will post to it, each with
+     its own subject line ("Press-on request…" / "Appointment request…").
 
-   Also update **`CONTACT_EMAIL`** to the artist's real inbox.
+> Note: this is a request-based flow by design — a pure static site can't show
+> real-time availability or take deposits on its own. The artist confirms each
+> appointment and sends a deposit/pay link (Venmo/CashApp/Stripe) manually.
 
 ## Swap in the real photos
 
@@ -65,10 +68,11 @@ maps to which slot and the recommended sizes. Drop in the real Instagram photos
 
 Pick any one:
 
+- **GitHub Pages** — Settings → Pages → Deploy from a branch → root. No build.
+  (Requires a public repo on the free plan.)
 - **Netlify** — drag this folder onto <https://app.netlify.com/drop>. Done.
   (Netlify also has built-in form handling if you'd rather not use Formspree.)
-- **Vercel** — `vercel` in this folder, or import the repo.
-- **Cloudflare Pages / GitHub Pages** — point it at this repo; no build command.
+- **Vercel / Cloudflare Pages** — import the repo; no build command.
 
 Then connect the artist's domain (e.g. `luvletterpressies.com`) in the host's
 dashboard.
@@ -77,7 +81,7 @@ dashboard.
 
 - [ ] Replace placeholder photos with real Instagram images.
 - [ ] Confirm press-on **design names + prices** (in `index.html`, `pressies` section).
-- [ ] Confirm **shipping turnaround** and **appointment/cancellation policies**
-      (FAQ section + Acuity).
+- [ ] Confirm **services** offered (in `index.html`, `book` section `<select>`).
+- [ ] Confirm **shipping turnaround**, **deposit amount**, and
+      **appointment/cancellation policies** (FAQ + booking copy).
 - [ ] Set `CONTACT_EMAIL` and choose a `FORM_ENDPOINT` (or keep mailto).
-- [ ] Confirm the Acuity link / paste the official embed snippet.

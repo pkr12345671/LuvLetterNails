@@ -242,7 +242,7 @@
           <p class="postcard__msg" id="formMsg" role="status" aria-live="polite"></p>
           <p class="postcard__fineprint">
             Prefer email? Write to
-            <a id="mailtoLink" href="#">hello@luvletternails.com</a>.
+            <a class="js-mailto" href="#">hello@luvletternails.com</a>.
           </p>
         </form>
       </div>
@@ -254,21 +254,86 @@
         <img class="book__seal" src="assets/svg/wax-seal.svg" alt="Luv Letter wax seal" width="160" height="160" />
       </div>
       <p class="eyebrow">By appointment</p>
-      <h2 class="section-title">Book your seat in the studio</h2>
+      <h2 class="section-title">Request your seat in the studio</h2>
       <p class="section-lead">
-        Real-time availability, reminders, and deposits — handled through our
-        scheduler below. Pick a time and we&rsquo;ll see you soon.
+        Send your appointment request below — your service and a couple of times
+        that work for you. I&rsquo;ll write back to confirm your spot and share a
+        deposit link to lock it in. Sealed with love.
       </p>
 
-      <div class="book__embed" id="acuityEmbed">
-        <!-- Acuity scheduler injected by JS (config in js/main.js). Fallback link: -->
-        <noscript>
-          <a class="btn btn--primary" href="https://luvletternails.as.me/schedule/ea9af220" target="_blank" rel="noopener">Book on Acuity</a>
-        </noscript>
-      </div>
-      <a class="book__fallback" href="https://luvletternails.as.me/schedule/ea9af220" target="_blank" rel="noopener">
-        Trouble loading? Open the booking page →
-      </a>
+      <form class="postcard book__form reveal" id="bookingForm" novalidate>
+        <p class="postcard__stamp" aria-hidden="true">appt<br />card</p>
+        <h3 class="postcard__title script">An appointment request</h3>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="b-name">Your name</label>
+            <input id="b-name" name="name" type="text" autocomplete="name" required />
+          </div>
+          <div class="field">
+            <label for="b-phone">Phone (for texts)</label>
+            <input id="b-phone" name="phone" type="tel" autocomplete="tel" />
+          </div>
+        </div>
+        <div class="field">
+          <label for="b-email">Email</label>
+          <input id="b-email" name="email" type="email" autocomplete="email" required />
+        </div>
+        <div class="field">
+          <label for="b-service">Service</label>
+          <select id="b-service" name="service">
+            <option value="">Choose…</option>
+            <option>Full custom set</option>
+            <option>Fill / refresh</option>
+            <option>Gel manicure</option>
+            <option>Nail art add-on</option>
+            <option>Soak-off / removal</option>
+            <option>Not sure — help me pick</option>
+          </select>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="b-date1">Preferred date</label>
+            <input id="b-date1" name="preferred_date_1" type="date" />
+          </div>
+          <div class="field">
+            <label for="b-time1">Time of day</label>
+            <select id="b-time1" name="preferred_time_1">
+              <option value="">Choose…</option>
+              <option>Morning</option>
+              <option>Afternoon</option>
+              <option>Evening</option>
+            </select>
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="b-date2">Backup date</label>
+            <input id="b-date2" name="preferred_date_2" type="date" />
+          </div>
+          <div class="field">
+            <label for="b-time2">Backup time</label>
+            <select id="b-time2" name="preferred_time_2">
+              <option value="">Choose…</option>
+              <option>Morning</option>
+              <option>Afternoon</option>
+              <option>Evening</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label for="b-notes">Anything else? (inspo, occasion, current nails)</label>
+          <textarea id="b-notes" name="notes" rows="3" placeholder="Tell me what you have in mind…"></textarea>
+        </div>
+
+        <button class="btn btn--primary btn--block" type="submit">Send my request</button>
+        <p class="postcard__msg" id="bookingMsg" role="status" aria-live="polite"></p>
+        <p class="postcard__fineprint">
+          This is a request, not an instant booking — I&rsquo;ll confirm your time by
+          text or email. Prefer to reach out directly? Write to
+          <a class="js-mailto" href="#">hello@luvletternails.com</a>.
+        </p>
+      </form>
     </section>
 
     <!-- ===== About ===== -->
@@ -330,15 +395,16 @@
             <em>(Final timelines confirmed by the artist.)</em></p>
         </details>
         <details class="faq__item">
-          <summary>What about in-person appointments?</summary>
-          <p>Booking, availability, deposits, and reminders are handled through our
-            scheduler in the <a href="#book">Book</a> section. Please review the policies
-            shown there before reserving.</p>
+          <summary>How do in-person appointments work?</summary>
+          <p>Send an appointment request in the <a href="#book">Book</a> section with your
+            service and a couple of times that work for you. I&rsquo;ll reply to confirm your
+            spot and send a deposit link to lock it in — it&rsquo;s a request, not an instant
+            booking, so your time isn&rsquo;t held until I confirm.</p>
         </details>
         <details class="faq__item">
           <summary>What&rsquo;s your cancellation policy?</summary>
-          <p><em>Placeholder — confirm with the artist.</em> Cancellation and rescheduling
-            terms are listed on the booking page at checkout.</p>
+          <p><em>Placeholder — confirm with the artist.</em> Deposits, cancellations, and
+            rescheduling terms will be shared when I confirm your appointment.</p>
         </details>
       </div>
     </section>
@@ -360,7 +426,7 @@
       </nav>
       <div class="footer__contact">
         <a href="https://www.instagram.com/luvletternails" target="_blank" rel="noopener">Instagram&nbsp;↗</a>
-        <a href="https://luvletternails.as.me/schedule/ea9af220" target="_blank" rel="noopener">Book on Acuity&nbsp;↗</a>
+        <a href="#book">Request an appointment</a>
         <a href="mailto:hello@luvletternails.com">hello@luvletternails.com</a>
       </div>
     </div>
