@@ -272,6 +272,9 @@
       </div>
 
       <div class="booker reveal" id="booker">
+        <!-- account bar (live mode only; filled by JS) -->
+        <div class="booker__account" id="bookerAccount" hidden></div>
+
         <!-- progress -->
         <ol class="booker__steps">
           <li data-step="1" class="is-active"><span>1</span> Service</li>
@@ -342,9 +345,20 @@
               <textarea id="b-notes" name="notes" rows="3" placeholder="Tell me what you have in mind…"></textarea>
             </div>
 
-            <button class="btn btn--primary btn--block" type="submit">Send my request</button>
+            <button class="btn btn--primary btn--block" type="submit" id="bookingSubmit">Send my request</button>
+
+            <!-- sign-in code (live mode only; shown by JS when a code is emailed) -->
+            <div class="booker__otp" id="bookerOtp" hidden>
+              <label for="b-otp">Enter the 6-digit code we emailed you</label>
+              <div class="booker__otp-row">
+                <input id="b-otp" name="otp" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" />
+                <button class="btn btn--primary" type="button" id="bookingVerify">Verify &amp; book</button>
+              </div>
+              <button class="booker__back" type="button" id="bookingResend">Resend code</button>
+            </div>
+
             <p class="postcard__msg" id="bookingMsg" role="status" aria-live="polite"></p>
-            <p class="postcard__fineprint">
+            <p class="postcard__fineprint" id="bookingFinePrint">
               This is a request, not an instant booking — I&rsquo;ll confirm your time by
               text or email. Prefer to reach out directly? Write to
               <a class="js-mailto" href="#">hello@luvletternails.com</a>.
@@ -509,6 +523,10 @@
 
   <div class="airmail-stripe" aria-hidden="true"></div>
 
+  <!-- Supabase client (only "lights up" once js/config.js has your keys) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/supabase.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>

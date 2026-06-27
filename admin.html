@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex" />
+  <title>Luv Letter — Admin</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Pinyon+Script&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    .admin { max-width: 920px; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
+    .admin__head { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+    .admin__head .brand__script { color: var(--red); font-size: 2.2rem; }
+    .admin__card { background: var(--paper); border: 1px solid var(--paper-edge); border-radius: var(--radius); box-shadow: var(--shadow-sm); padding: 1.4rem 1.5rem; margin-bottom: 1.4rem; }
+    .bk { display: grid; grid-template-columns: 1fr auto; gap: 0.6rem 1rem; align-items: start; padding: 1rem 0; border-bottom: 1px dashed var(--paper-edge); }
+    .bk:last-child { border-bottom: 0; }
+    .bk__when { font-family: var(--serif); font-style: italic; font-size: 1.2rem; color: var(--ink); }
+    .bk__who { font-size: 0.9rem; color: var(--ink-soft); }
+    .bk__svc { font-weight: 700; color: var(--red-dark); }
+    .bk__actions { display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: flex-end; }
+    .bk__actions .btn { padding: 0.45rem 0.9rem; font-size: 0.82rem; }
+    .pill { display: inline-block; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; padding: 0.15rem 0.55rem; border-radius: 999px; }
+    .pill--pending { background: var(--blush); color: var(--red-dark); }
+    .pill--confirmed { background: #2c7a4b; color: #fff; }
+    .muted { color: var(--ink-soft); }
+    .admin__row { display: flex; gap: 0.6rem; flex-wrap: wrap; align-items: end; }
+    .admin__row .field { margin-bottom: 0; }
+    #adminMsg { min-height: 1.2em; font-weight: 700; }
+    #adminMsg.ok { color: #2c7a4b; } #adminMsg.err { color: var(--red); }
+  </style>
+</head>
+<body>
+  <div class="airmail-stripe" aria-hidden="true"></div>
+
+  <main class="admin">
+    <div class="admin__head">
+      <span class="brand__script">Luv Letter</span>
+      <span class="muted">Admin · bookings</span>
+    </div>
+
+    <!-- not-configured notice -->
+    <div class="admin__card" id="notConfigured" hidden>
+      <h3>Backend not connected yet</h3>
+      <p class="muted">Add your Supabase keys to <code>js/config.js</code> and run
+        <code>supabase/schema.sql</code> first. See <code>SETUP-SUPABASE.md</code>.</p>
+    </div>
+
+    <!-- sign in -->
+    <div class="admin__card" id="signIn" hidden>
+      <h3>Sign in</h3>
+      <p class="muted">Use the artist email you made admin.</p>
+      <div class="admin__row">
+        <div class="field"><label for="ad-email">Email</label><input id="ad-email" type="email" autocomplete="email" /></div>
+        <button class="btn btn--primary" id="adSend" type="button">Email me a code</button>
+      </div>
+      <div class="admin__row" id="adOtpRow" hidden style="margin-top:0.8rem;">
+        <div class="field"><label for="ad-otp">6-digit code</label><input id="ad-otp" type="text" inputmode="numeric" maxlength="6" /></div>
+        <button class="btn btn--primary" id="adVerify" type="button">Verify</button>
+      </div>
+      <p id="adminMsg" role="status" aria-live="polite"></p>
+    </div>
+
+    <!-- dashboard -->
+    <div id="dashboard" hidden>
+      <div class="admin__card">
+        <div class="admin__head" style="margin-bottom:0.5rem;">
+          <h3 style="margin:0;">Upcoming bookings</h3>
+          <button class="btn btn--ghost" id="adSignOut" type="button">Sign out</button>
+        </div>
+        <div id="bookingList"><p class="muted">Loading…</p></div>
+      </div>
+
+      <div class="admin__card">
+        <h3>Block off time (day off / break)</h3>
+        <div class="admin__row">
+          <div class="field"><label for="bo-start">From</label><input id="bo-start" type="datetime-local" /></div>
+          <div class="field"><label for="bo-end">To</label><input id="bo-end" type="datetime-local" /></div>
+          <div class="field"><label for="bo-reason">Reason (optional)</label><input id="bo-reason" type="text" /></div>
+          <button class="btn btn--primary" id="boAdd" type="button">Block it</button>
+        </div>
+        <div id="blackoutList" style="margin-top:1rem;"></div>
+      </div>
+    </div>
+  </main>
+
+  <div class="airmail-stripe" aria-hidden="true"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

@@ -34,6 +34,9 @@
 
 * { box-sizing: border-box; }
 
+/* the [hidden] attribute must always win over component display rules */
+[hidden] { display: none !important; }
+
 html { scroll-behavior: smooth; scroll-padding-top: 90px; }
 
 body {
@@ -553,6 +556,35 @@ section > * { max-width: var(--maxw); margin-inline: auto; }
   font-family: var(--serif); font-style: italic; font-size: 1.2rem;
   color: var(--ink); margin: 0 0 1rem;
 }
+
+/* account bar (live mode) */
+.booker__account {
+  display: flex; align-items: center; justify-content: space-between; gap: 0.8rem;
+  flex-wrap: wrap;
+  background: var(--blush); border-radius: 10px;
+  padding: 0.55rem 0.9rem; margin-bottom: 1.1rem;
+  font-size: 0.88rem; color: var(--ink);
+}
+.booker__account strong { color: var(--red-dark); }
+
+/* sign-in code (OTP) */
+.booker__otp {
+  margin-top: 1rem; padding: 1rem; border: 1.5px dashed var(--rose-deep);
+  border-radius: 12px; background: var(--cream);
+}
+.booker__otp > label {
+  display: block; font-size: 0.82rem; font-weight: 700; letter-spacing: 0.04em;
+  text-transform: uppercase; color: var(--ink-soft); margin-bottom: 0.5rem;
+}
+.booker__otp-row { display: flex; gap: 0.6rem; }
+.booker__otp-row input {
+  flex: 1; font-family: var(--sans); font-size: 1.2rem; letter-spacing: 0.3em;
+  text-align: center; background: #fff; border: 1.5px solid var(--paper-edge);
+  border-radius: 8px; padding: 0.6rem 0.5rem;
+}
+.booker__otp-row input:focus { outline: none; border-color: var(--rose-deep); box-shadow: 0 0 0 3px var(--blush); }
+.booker__otp-row .btn { white-space: nowrap; }
+.booker__otp #bookingResend { margin-top: 0.6rem; padding: 0; }
 
 /* step 1 — services */
 .svc-cat { margin-bottom: 1.4rem; }

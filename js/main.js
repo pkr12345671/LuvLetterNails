@@ -289,11 +289,16 @@ function initBooker() {
   const root = document.getElementById("booker");
   if (!root) return;
 
-  const state = { service: null, addons: [], date: null, time: null };
+  // LIVE = Supabase configured → real availability, logins, no double-booking.
+  // Otherwise the scheduler runs in request mode (emails you, like before).
+  const LIVE = !!(window.LLBooking && window.LLBooking.enabled);
+  const state = { service: null, addons: [], date: null, time: null, busy: [], pendingEmail: null };
   const panels = root.querySelectorAll(".booker__panel");
   const steps = root.querySelectorAll(".booker__steps li");
+  let currentStep = 1;
 
   const show = (n) => {
+    currentStep = n;
     panels.forEach((p) => (p.hidden = p.dataset.panel !== String(n)));
     steps.forEach((s) => s.classList.toggle("is-active", +s.dataset.step <= n));
     root.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -321,16 +326,22 @@ function initBooker() {
     return `~$${base + addon}`;
   };
 
+  // does [startMs, endMs) collide with any already-taken/blocked range?
+  const overlapsBusy = (startMs, endMs) => state.busy.some((b) => startMs < b.end && endMs > b.start);
+
   const slotsFor = (date) => {
     if (!state.service) return [];
     const ranges = BOOKING.hours[date.getDay()] || [];
-    const lead = new Date(Date.now() + BOOKING.leadHours * 3600e3);
+    const lead = Date.now() + BOOKING.leadHours * 3600e3;
     const dur = apptDuration();
     const out = [];
     for (const [open, close] of ranges) {
       for (let t = toMin(open); t + dur <= toMin(close); t += BOOKING.slotMinutes) {
         const dt = new Date(date); dt.setHours(0, 0, 0, 0); dt.setMinutes(t);
-        if (dt >= lead) out.push(`${pad(Math.floor(t / 60))}:${pad(t % 60)}`);
+        const startMs = dt.getTime(), endMs = startMs + dur * 60000;
+        if (startMs >= lead && !overlapsBusy(startMs, endMs)) {
+          out.push(`${pad(Math.floor(t / 60))}:${pad(t % 60)}`);
+        }
       }
     }
     return out;
@@ -342,6 +353,22 @@ function initBooker() {
       if (date >= today && date <= maxDate && slotsFor(date).length > 0) return true;
     }
     return false;
+  };
+
+  // pull taken/blocked ranges from Supabase (live mode); no-op otherwise
+  async function refreshBusy() {
+    if (!LIVE) { state.busy = []; return; }
+    try {
+      const rows = await window.LLBooking.busyRanges(today.toISOString(), maxDate.toISOString());
+      state.busy = rows.map((r) => ({ start: Date.parse(r.start_ts), end: Date.parse(r.end_ts) }));
+    } catch (e) { state.busy = []; }
+  }
+  // build the appointment's start/end as ISO for the DB
+  const apptISO = () => {
+    const [h, m] = state.time.split(":").map(Number);
+    const start = new Date(state.date); start.setHours(h, m, 0, 0);
+    const end = new Date(start.getTime() + apptDuration() * 60000);
+    return { start: start.toISOString(), end: end.toISOString() };
   };
 
   /* ----- Step 1: services ----- */
@@ -411,8 +438,10 @@ function initBooker() {
     });
   }
 
-  document.getElementById("addonsNext").addEventListener("click", () => {
+  const addonsNextBtn = document.getElementById("addonsNext");
+  addonsNextBtn.addEventListener("click", async () => {
     state.date = null; state.time = null;
+    if (LIVE) { addonsNextBtn.disabled = true; await refreshBusy(); addonsNextBtn.disabled = false; }
     view = new Date(); view.setDate(1);
     let guard = 0;
     while (!monthHasOpen(view) && view < maxDate && guard++ < 14) view.setMonth(view.getMonth() + 1);
@@ -492,19 +521,28 @@ function initBooker() {
     b.addEventListener("click", () => show(+b.dataset.back))
   );
 
+  /* ----- auth + submit ----- */
   const form = document.getElementById("bookingForm");
   const say = makeSay(document.getElementById("bookingMsg"));
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    if (!state.service || !state.date || !state.time) {
-      say("Please pick a service, date, and time first.", "err"); show(1); return;
-    }
+  const submitBtn = document.getElementById("bookingSubmit");
+  const otpBox = document.getElementById("bookerOtp");
+  const otpInput = document.getElementById("b-otp");
+  const verifyBtn = document.getElementById("bookingVerify");
+  const resendBtn = document.getElementById("bookingResend");
+  const finePrint = document.getElementById("bookingFinePrint");
+  const accountBar = document.getElementById("bookerAccount");
+
+  // In live mode the slot is actually reserved → adjust the copy.
+  if (LIVE) {
+    submitBtn.textContent = "Confirm booking";
+    if (finePrint)
+      finePrint.innerHTML =
+        `Your time is reserved the moment you confirm. I’ll follow up about the $${BOOKING.deposit} deposit. ` +
+        `Questions? DM <a href="https://www.instagram.com/luvletternails" target="_blank" rel="noopener">@luvletternails</a>.`;
+  }
+
+  function gatherData() {
     const data = new FormData(form);
-    const name = (data.get("name") || "").toString().trim();
-    const email = (data.get("email") || "").toString().trim();
-    if (!name || !email || !EMAIL_RE.test(email)) {
-      say("Please add your name and a valid email so I can confirm. 💌", "err"); return;
-    }
     data.set("service", state.service.name);
     if (state.addons.length) data.set("addons", state.addons.map((a) => `${a.group}: ${a.name}`).join(", "));
     data.set("duration", fmtDur(apptDuration()));
@@ -513,15 +551,117 @@ function initBooker() {
     data.set("date", longDate(state.date));
     data.set("time", fmt12(state.time));
     data.set("deposit", `$${BOOKING.deposit}`);
-
-    const result = await deliverRequest(data, "Appointment request", name, say);
-    if (result === "sent") {
-      form.reset();
-      say(`Requested! I’ll confirm ${longDate(state.date)} at ${fmt12(state.time)} by text or email. 💌`, "ok");
-    } else if (result === "mailto") {
-      say(`Opening your email — hit send to request ${longDate(state.date)} at ${fmt12(state.time)}. 💌`, "ok");
+    return data;
+  }
+  function validate(data) {
+    if (!state.service || !state.date || !state.time) {
+      say("Please pick a service, date, and time first.", "err"); show(1); return null;
     }
+    const name = (data.get("name") || "").toString().trim();
+    const email = (data.get("email") || "").toString().trim();
+    if (!name || !email || !EMAIL_RE.test(email)) {
+      say("Please add your name and a valid email so I can confirm. 💌", "err"); return null;
+    }
+    return { name, email };
+  }
+
+  // write the booking to Supabase (caller ensures the user is signed in)
+  async function commitBooking() {
+    const data = gatherData();
+    const { start, end } = apptISO();
+    const { error, taken } = await window.LLBooking.createBooking({
+      name: (data.get("name") || "").toString().trim(),
+      phone: (data.get("phone") || "").toString().trim(),
+      service_name: data.get("service"),
+      addons: state.addons.map((a) => ({ group: a.group, name: a.name, price: a.price, min: a.min })),
+      start_ts: start,
+      end_ts: end,
+      price_estimate: priceEstimate(),
+      notes: [data.get("addons") ? "Add-ons: " + data.get("addons") : "", (data.get("notes") || "").toString()].filter(Boolean).join("\n"),
+    });
+    if (taken) {
+      say("Ah — someone just grabbed that time. Pick another and you’re set. 💔", "err");
+      await refreshBusy(); renderCal(); show(3); return;
+    }
+    if (error) { say(error.message || "Couldn’t book that — please try again.", "err"); return; }
+    if (otpBox) otpBox.hidden = true;
+    form.reset();
+    say(`Booked! You’re set for ${longDate(state.date)} at ${fmt12(state.time)}. Check your email for confirmation. 💌`, "ok");
+    await refreshBusy();
+    renderAccount(await window.LLBooking.getUser());
+  }
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const data = gatherData();
+    const v = validate(data);
+    if (!v) return;
+
+    // request mode (no Supabase configured) → email / Formspree, like before
+    if (!LIVE) {
+      const result = await deliverRequest(data, "Appointment request", v.name, say);
+      if (result === "sent") { form.reset(); say(`Requested! I’ll confirm ${longDate(state.date)} at ${fmt12(state.time)} by text or email. 💌`, "ok"); }
+      else if (result === "mailto") { say(`Opening your email — hit send to request ${longDate(state.date)} at ${fmt12(state.time)}. 💌`, "ok"); }
+      return;
+    }
+
+    // live mode: already signed in? book now. otherwise email a sign-in code first.
+    const user = await window.LLBooking.getUser();
+    if (user) { say("Booking your spot…", ""); await commitBooking(); return; }
+    say("Emailing you a 6-digit sign-in code…", "");
+    const { error } = await window.LLBooking.sendCode(v.email);
+    if (error) { say(error.message || "Couldn’t send the code — try again.", "err"); return; }
+    state.pendingEmail = v.email;
+    if (otpBox) { otpBox.hidden = false; otpInput.focus(); }
+    say("Check your email for a 6-digit code, enter it below, and you’re booked.", "ok");
   });
+
+  if (verifyBtn) {
+    verifyBtn.addEventListener("click", async () => {
+      const code = (otpInput.value || "").trim();
+      if (code.length < 6) { say("Enter the 6-digit code from your email.", "err"); return; }
+      say("Verifying…", "");
+      const { error } = await window.LLBooking.verifyCode(state.pendingEmail, code);
+      if (error) { say("That code didn’t match — double-check it or resend.", "err"); return; }
+      await commitBooking();
+    });
+    otpInput.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); verifyBtn.click(); } });
+  }
+  if (resendBtn) {
+    resendBtn.addEventListener("click", async () => {
+      if (!state.pendingEmail) return;
+      say("Resending your code…", "");
+      const { error } = await window.LLBooking.sendCode(state.pendingEmail);
+      say(error ? "Couldn’t resend — try again." : "Sent! Check your email.", error ? "err" : "ok");
+    });
+  }
+
+  /* ----- account bar + realtime (live mode) ----- */
+  function renderAccount(user) {
+    if (!LIVE || !accountBar) return;
+    accountBar.hidden = false;
+    if (user) {
+      accountBar.innerHTML =
+        `<span>Signed in as <strong>${user.email}</strong></span>` +
+        `<button type="button" class="booker__back" id="signOutBtn">Sign out</button>`;
+      const emailField = document.getElementById("b-email");
+      if (emailField && !emailField.value) emailField.value = user.email;
+      const so = document.getElementById("signOutBtn");
+      if (so) so.addEventListener("click", () => window.LLBooking.signOut());
+    } else {
+      accountBar.innerHTML = `<span>You’ll sign in with a quick email code when you book — that’s your account.</span>`;
+    }
+  }
+
+  if (LIVE) {
+    window.LLBooking.onAuth((user) => renderAccount(user));
+    if (window.LLBooking.onBusyChange) {
+      window.LLBooking.onBusyChange(async () => {
+        await refreshBusy();
+        if (currentStep === 3) { renderCal(); if (state.date && !slotsWrap.hidden) renderSlots(); }
+      });
+    }
+  }
 
   renderCal();
 }
