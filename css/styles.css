@@ -224,7 +224,7 @@ section > * { max-width: var(--maxw); margin-inline: auto; }
   display: grid;
   grid-template-columns: 1.05fr 0.95fr;
   gap: clamp(1.5rem, 4vw, 3.5rem);
-  align-items: center;
+  align-items: stretch;
 }
 .hero__note { padding-left: clamp(2.4rem, 5vw, 3.4rem); }
 .hero__postmark {
@@ -251,14 +251,15 @@ section > * { max-width: var(--maxw); margin-inline: auto; }
 .hero__cta { display: flex; flex-wrap: wrap; gap: 0.8rem; margin: 1.4rem 0 1rem; }
 .hero__sign { font-size: 1.7rem; color: var(--red-dark); text-align: right; margin: 0.4rem 0 0; }
 
-.hero__photo { position: relative; margin: 0; }
+.hero__photo { position: relative; margin: 0; height: 100%; }
 .hero__photo > img:first-child {
   width: 100%;
+  height: 100%;            /* desktop: match the note card's height (kills the empty gap) */
   border-radius: var(--radius);
   box-shadow: var(--shadow-md);
   border: 6px solid #fff;
   outline: 1px solid var(--paper-edge);
-  aspect-ratio: 4 / 5;
+  aspect-ratio: 4 / 5;     /* fallback ratio when the column height is indefinite (mobile) */
   object-fit: cover;
 }
 .hero__seal {
