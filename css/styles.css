@@ -213,6 +213,8 @@ section > * { max-width: var(--maxw); margin-inline: auto; }
 .hero { position: relative; padding-top: clamp(2.5rem, 5vw, 4rem); overflow: hidden; }
 .hero__bg {
   position: absolute; inset: 0;
+  max-width: none;   /* override section > * cap so the gradient is full-bleed */
+  margin: 0;
   background:
     radial-gradient(60% 60% at 12% 8%, var(--rose), transparent 62%),
     radial-gradient(60% 60% at 95% 92%, var(--coral), transparent 55%),
