@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 750" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Cherry Cordial placeholder">
+  <rect width="600" height="750" fill="#f3d9dd"/>
+  <rect x="6" y="6" width="588" height="738" fill="none" stroke="#b23a48" stroke-opacity="0.35" stroke-width="2" stroke-dasharray="6 6"/>
+  <g fill="#b23a48" fill-opacity="0.75" font-family="Georgia, serif" text-anchor="middle">
+    <text x="300" y="371" font-size="37" font-style="italic">Cherry Cordial</text>
+    <text x="300" y="412" font-size="20" fill-opacity="0.6">press-on design · 4:5</text>
+  </g>
+</svg>

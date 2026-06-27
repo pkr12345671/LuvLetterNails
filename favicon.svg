@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Luv Letter">
+  <rect width="64" height="64" rx="12" fill="#fbf6ef"/>
+  <!-- envelope -->
+  <rect x="10" y="16" width="44" height="32" rx="4" fill="#fff" stroke="#b23a48" stroke-width="2"/>
+  <path d="M10 20 L32 36 L54 20" fill="none" stroke="#b23a48" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- heart wax seal -->
+  <path d="M32 44 c-4 -4 -9 -6 -9 -11 a4.5 4.5 0 0 1 9 -2 a4.5 4.5 0 0 1 9 2 c0 5 -5 7 -9 11 z" fill="#b23a48"/>
+</svg>

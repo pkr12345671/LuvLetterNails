@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Luv Letter — Press-On Nails &amp; In-Person Appointments</title>
+  <meta name="description" content="Luv Letter — luxury made-to-order press-on nails shipped to your door, and in-person nail appointments by a licensed nail artist. Sealed with love." />
+  <meta name="theme-color" content="#b23a48" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Luv Letter — Press-Ons &amp; In-Person Nails" />
+  <meta property="og:description" content="Luxury made-to-order press-on nails, shipped to your door — and in-person appointments. Sealed with love." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="assets/img/hero.svg" />
+
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Pinyon+Script&family=Nunito+Sans:wght@300;400;600;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <!-- ===== Top airmail stripe ===== -->
+  <div class="airmail-stripe" aria-hidden="true"></div>
+
+  <!-- ===== Nav ===== -->
+  <header class="nav" id="top">
+    <div class="nav__inner">
+      <a class="brand" href="#top" aria-label="Luv Letter home">
+        <span class="brand__script">Luv Letter</span>
+        <span class="brand__sub">nails &amp; pressies</span>
+      </a>
+
+      <button class="nav__toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="navMenu">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="nav__menu" id="navMenu" aria-label="Primary">
+        <a href="#letter">The Letter</a>
+        <a href="#services">Services</a>
+        <a href="#pressies">Pressies</a>
+        <a href="#book">Book</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+        <a class="btn btn--mini" href="#request">Request a set</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- ===== Hero: the opening of the letter ===== -->
+    <section class="hero" id="letter">
+      <div class="hero__bg" aria-hidden="true"></div>
+      <div class="hero__grid">
+        <article class="note-paper hero__note reveal">
+          <p class="hero__postmark" aria-hidden="true">·&nbsp;est. with love&nbsp;·</p>
+          <p class="script hero__salutation">Dear you,</p>
+          <h1 class="hero__headline">
+            your nails deserve<br />a love letter.
+          </h1>
+          <p class="hero__body">
+            Luxury, made-to-order <strong>press-on nails</strong> shipped to your door —
+            and <strong>in-person appointments</strong> by a licensed nail artist.
+            Two ways to be adored, one little love letter.
+          </p>
+          <div class="hero__cta">
+            <a class="btn btn--primary" href="#pressies">Shop the Pressies</a>
+            <a class="btn btn--ghost" href="#book">Book In-Person</a>
+          </div>
+          <p class="hero__sign script">— Luv, the artist</p>
+        </article>
+
+        <figure class="hero__photo reveal">
+          <img src="assets/img/hero.svg" alt="Featured Luv Letter nail set" width="1200" height="1500" loading="eager" />
+          <img class="hero__seal" src="assets/svg/wax-seal.svg" alt="" aria-hidden="true" width="120" height="120" />
+        </figure>
+      </div>
+    </section>
+
+    <!-- ===== Two service lines ===== -->
+    <section class="services" id="services">
+      <p class="eyebrow">Two ways to wear it</p>
+      <h2 class="section-title">Choose your envelope</h2>
+      <div class="services__grid">
+        <article class="service-card reveal">
+          <span class="service-card__tag">delivered</span>
+          <h3>The Pressies</h3>
+          <p>
+            Hand-crafted, reusable press-on sets — custom designed, sized to you,
+            and mailed straight to your mailbox. Perfect for events, travel, or
+            never sitting still.
+          </p>
+          <a class="link-arrow" href="#pressies">Browse the stamp sheet →</a>
+        </article>
+        <article class="service-card reveal">
+          <span class="service-card__tag">in person</span>
+          <h3>The Appointments</h3>
+          <p>
+            Sit back and be pampered. Book an in-person visit with a licensed nail
+            artist for a full custom set, fills, and finishing touches — all in the studio.
+          </p>
+          <a class="link-arrow" href="#book">Reserve your seat →</a>
+        </article>
+      </div>
+    </section>
+
+    <!-- ===== Pressies: collectible stamp sheet ===== -->
+    <section class="pressies" id="pressies">
+      <div class="pressies__head">
+        <p class="eyebrow">Collect them all</p>
+        <h2 class="section-title">The Pressies stamp sheet</h2>
+        <p class="section-lead">
+          Each design is a little collectible. Tap a stamp you love, then send us
+          a request to make it yours — custom length, shape, and size.
+        </p>
+      </div>
+
+      <div class="stamp-sheet" id="stampSheet">
+        <!-- stamps injected/enhanced by JS; static fallback below -->
+        <button class="stamp" data-design="Cherry Cordial" data-price="$45">
+          <span class="stamp__price">45<small>¢</small></span>
+          <img src="assets/img/stamp-01.svg" alt="Cherry Cordial press-on design" loading="lazy" width="600" height="750" />
+          <span class="stamp__name">Cherry Cordial</span>
+        </button>
+        <button class="stamp" data-design="Vintage Lace" data-price="$50">
+          <span class="stamp__price">50<small>¢</small></span>
+          <img src="assets/img/stamp-02.svg" alt="Vintage Lace press-on design" loading="lazy" width="600" height="750" />
+          <span class="stamp__name">Vintage Lace</span>
+        </button>
+        <button class="stamp" data-design="Café au Lait" data-price="$45">
+          <span class="stamp__price">45<small>¢</small></span>
+          <img src="assets/img/stamp-03.svg" alt="Café au Lait press-on design" loading="lazy" width="600" height="750" />
+          <span class="stamp__name">Café au Lait</span>
+        </button>
+        <button class="stamp" data-design="Strawberry Milk" data-price="$48">
+          <span class="stamp__price">48<small>¢</small></span>
+          <img src="assets/img/stamp-04.svg" alt="Strawberry Milk press-on design" loading="lazy" width="600" height="750" />
+          <span class="stamp__name">Strawberry Milk</span>
+        </button>
+        <button class="stamp" data-design="Gilded Rose" data-price="$55">
+          <span class="stamp__price">55<small>¢</small></span>
+          <img src="assets/img/stamp-05.svg" alt="Gilded Rose press-on design" loading="lazy" width="600" height="750" />
+          <span class="stamp__name">Gilded Rose</span>
+        </button>
+        <button class="stamp" data-design="Pearl Letter" data-price="$52">
+          <span class="stamp__price">52<small>¢</small></span>
+          <img src="assets/img/stamp-06.svg" alt="Pearl Letter press-on design" loading="lazy" width="600" height="750" />
+          <span class="stamp__name">Pearl Letter</span>
+        </button>
+        <button class="stamp" data-design="Sealed Kiss" data-price="$50">
+          <span class="stamp__price">50<small>¢</small></span>
+          <img src="assets/img/stamp-07.svg" alt="Sealed Kiss press-on design" loading="lazy" width="600" height="750" />
+          <span class="stamp__name">Sealed Kiss</span>
+        </button>
+        <button class="stamp" data-design="Love Note" data-price="$48">
+          <span class="stamp__price">48<small>¢</small></span>
+          <img src="assets/img/stamp-08.svg" alt="Love Note press-on design" loading="lazy" width="600" height="750" />
+          <span class="stamp__name">Love Note</span>
+        </button>
+      </div>
+      <p class="pressies__note">
+        Prices &amp; designs shown are samples — <em>final pricing confirmed on request.</em>
+      </p>
+    </section>
+
+    <!-- ===== Request your set (the postcard form) ===== -->
+    <section class="request" id="request">
+      <div class="request__grid">
+        <div class="request__intro reveal">
+          <p class="eyebrow">Write to us</p>
+          <h2 class="section-title">Request your set</h2>
+          <p class="section-lead">
+            Fill out your little postcard below. Tell us the design you fell for,
+            your length, shape, and size, and we&rsquo;ll write back with the details
+            to make it official.
+          </p>
+          <ul class="request__list">
+            <li><strong>Made to order</strong> — hand-crafted just for you.</li>
+            <li><strong>Reusable</strong> — sturdy builder-gel layers, worn again &amp; again.</li>
+            <li><strong>Sized to you</strong> — sizing kit available for the perfect fit.</li>
+          </ul>
+        </div>
+
+        <form class="postcard reveal" id="requestForm" novalidate>
+          <p class="postcard__stamp" aria-hidden="true">post<br />card</p>
+          <h3 class="postcard__title script">A note to Luv Letter</h3>
+
+          <div class="field">
+            <label for="f-name">Your name</label>
+            <input id="f-name" name="name" type="text" autocomplete="name" required />
+          </div>
+          <div class="field">
+            <label for="f-email">Email</label>
+            <input id="f-email" name="email" type="email" autocomplete="email" required />
+          </div>
+          <div class="field">
+            <label for="f-design">Design you love</label>
+            <input id="f-design" name="design" type="text" placeholder="e.g. Gilded Rose, or describe your own" />
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label for="f-shape">Shape</label>
+              <select id="f-shape" name="shape">
+                <option value="">Choose…</option>
+                <option>Almond</option>
+                <option>Coffin / Ballerina</option>
+                <option>Square</option>
+                <option>Squoval</option>
+                <option>Stiletto</option>
+                <option>Round</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="f-length">Length</label>
+              <select id="f-length" name="length">
+                <option value="">Choose…</option>
+                <option>Short</option>
+                <option>Medium</option>
+                <option>Long</option>
+                <option>Extra long</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label for="f-size">Nail sizes</label>
+            <select id="f-size" name="sizing">
+              <option value="">Choose…</option>
+              <option>I have my sizes</option>
+              <option>Send me a sizing kit</option>
+              <option>Not sure yet — help me</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="f-notes">Your love note (details, dates, inspo)</label>
+            <textarea id="f-notes" name="notes" rows="3" placeholder="Event date, colors, anything special…"></textarea>
+          </div>
+
+          <button class="btn btn--primary btn--block" type="submit">Seal &amp; send</button>
+          <p class="postcard__msg" id="formMsg" role="status" aria-live="polite"></p>
+          <p class="postcard__fineprint">
+            Prefer email? Write to
+            <a id="mailtoLink" href="#">hello@luvletternails.com</a>.
+          </p>
+        </form>
+      </div>
+    </section>
+
+    <!-- ===== Book in-person: wax seal anchor ===== -->
+    <section class="book" id="book">
+      <div class="book__seal-wrap reveal">
+        <img class="book__seal" src="assets/svg/wax-seal.svg" alt="Luv Letter wax seal" width="160" height="160" />
+      </div>
+      <p class="eyebrow">By appointment</p>
+      <h2 class="section-title">Book your seat in the studio</h2>
+      <p class="section-lead">
+        Real-time availability, reminders, and deposits — handled through our
+        scheduler below. Pick a time and we&rsquo;ll see you soon.
+      </p>
+
+      <div class="book__embed" id="acuityEmbed">
+        <!-- Acuity scheduler injected by JS (config in js/main.js). Fallback link: -->
+        <noscript>
+          <a class="btn btn--primary" href="https://luvletternails.as.me/schedule/ea9af220" target="_blank" rel="noopener">Book on Acuity</a>
+        </noscript>
+      </div>
+      <a class="book__fallback" href="https://luvletternails.as.me/schedule/ea9af220" target="_blank" rel="noopener">
+        Trouble loading? Open the booking page →
+      </a>
+    </section>
+
+    <!-- ===== About ===== -->
+    <section class="about" id="about">
+      <figure class="about__photo reveal">
+        <img src="assets/img/about.svg" alt="The Luv Letter nail artist" width="1000" height="1200" loading="lazy" />
+      </figure>
+      <div class="about__text reveal">
+        <p class="eyebrow">The artist</p>
+        <h2 class="section-title">Every set is signed with love</h2>
+        <p>
+          Luv Letter began with a simple belief: a great set of nails feels like
+          receiving a love letter — personal, thoughtful, and just for you. As a
+          licensed nail artist, I hand-craft every press-on set and pour the same
+          care into every in-person appointment.
+        </p>
+        <p>
+          Whether you&rsquo;re across the country or right around the corner,
+          there&rsquo;s a little envelope here with your name on it.
+        </p>
+        <a class="link-arrow" href="https://www.instagram.com/luvletternails" target="_blank" rel="noopener">Follow @luvletternails →</a>
+      </div>
+    </section>
+
+    <!-- ===== Gallery ===== -->
+    <section class="gallery" id="gallery">
+      <p class="eyebrow">From the studio</p>
+      <h2 class="section-title">The lookbook</h2>
+      <div class="gallery__grid">
+        <a class="gallery__item reveal" href="https://www.instagram.com/luvletternails" target="_blank" rel="noopener"><img src="assets/img/gallery-01.svg" alt="Nail look 1" loading="lazy" width="800" height="800" /></a>
+        <a class="gallery__item reveal" href="https://www.instagram.com/luvletternails" target="_blank" rel="noopener"><img src="assets/img/gallery-02.svg" alt="Nail look 2" loading="lazy" width="800" height="800" /></a>
+        <a class="gallery__item reveal" href="https://www.instagram.com/luvletternails" target="_blank" rel="noopener"><img src="assets/img/gallery-03.svg" alt="Nail look 3" loading="lazy" width="800" height="800" /></a>
+        <a class="gallery__item reveal" href="https://www.instagram.com/luvletternails" target="_blank" rel="noopener"><img src="assets/img/gallery-04.svg" alt="Nail look 4" loading="lazy" width="800" height="800" /></a>
+        <a class="gallery__item reveal" href="https://www.instagram.com/luvletternails" target="_blank" rel="noopener"><img src="assets/img/gallery-05.svg" alt="Nail look 5" loading="lazy" width="800" height="800" /></a>
+        <a class="gallery__item reveal" href="https://www.instagram.com/luvletternails" target="_blank" rel="noopener"><img src="assets/img/gallery-06.svg" alt="Nail look 6" loading="lazy" width="800" height="800" /></a>
+      </div>
+    </section>
+
+    <!-- ===== FAQ ===== -->
+    <section class="faq" id="faq">
+      <p class="eyebrow">Good to know</p>
+      <h2 class="section-title">Care &amp; questions</h2>
+      <div class="faq__list">
+        <details class="faq__item">
+          <summary>How do the press-ons fit?</summary>
+          <p>Each set is made to order and sized to you. If you don&rsquo;t know your
+            sizes, request a sizing kit on the form and we&rsquo;ll get you measured before
+            we make your set.</p>
+        </details>
+        <details class="faq__item">
+          <summary>Are the press-ons reusable?</summary>
+          <p>Yes — built with sturdy builder-gel layers so, with proper care and the
+            right adhesive, they can be worn again and again.</p>
+        </details>
+        <details class="faq__item">
+          <summary>How long does shipping take?</summary>
+          <p>Sets are hand-crafted to order, so production time plus shipping applies.
+            We&rsquo;ll confirm the current turnaround when we reply to your request.
+            <em>(Final timelines confirmed by the artist.)</em></p>
+        </details>
+        <details class="faq__item">
+          <summary>What about in-person appointments?</summary>
+          <p>Booking, availability, deposits, and reminders are handled through our
+            scheduler in the <a href="#book">Book</a> section. Please review the policies
+            shown there before reserving.</p>
+        </details>
+        <details class="faq__item">
+          <summary>What&rsquo;s your cancellation policy?</summary>
+          <p><em>Placeholder — confirm with the artist.</em> Cancellation and rescheduling
+            terms are listed on the booking page at checkout.</p>
+        </details>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===== Footer ===== -->
+  <footer class="footer" id="contact">
+    <div class="footer__inner">
+      <div class="footer__brand">
+        <span class="brand__script">Luv Letter</span>
+        <p class="footer__tagline script">Sealed with love.</p>
+      </div>
+      <nav class="footer__links" aria-label="Footer">
+        <a href="#pressies">Pressies</a>
+        <a href="#book">Book</a>
+        <a href="#about">About</a>
+        <a href="#faq">FAQ</a>
+        <a href="#request">Request a set</a>
+      </nav>
+      <div class="footer__contact">
+        <a href="https://www.instagram.com/luvletternails" target="_blank" rel="noopener">Instagram&nbsp;↗</a>
+        <a href="https://luvletternails.as.me/schedule/ea9af220" target="_blank" rel="noopener">Book on Acuity&nbsp;↗</a>
+        <a href="mailto:hello@luvletternails.com">hello@luvletternails.com</a>
+      </div>
+    </div>
+    <p class="footer__copy">© <span id="year"></span> Luv Letter · Press-ons &amp; in-person nails · Made with love.</p>
+  </footer>
+
+  <div class="airmail-stripe" aria-hidden="true"></div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Luv Letter wax seal">
+  <defs>
+    <radialGradient id="wax" cx="38%" cy="32%" r="75%">
+      <stop offset="0%" stop-color="#d9525f"/>
+      <stop offset="45%" stop-color="#b23a48"/>
+      <stop offset="100%" stop-color="#7e2630"/>
+    </radialGradient>
+    <radialGradient id="waxInner" cx="38%" cy="32%" r="75%">
+      <stop offset="0%" stop-color="#c0414e"/>
+      <stop offset="100%" stop-color="#8c2c38"/>
+    </radialGradient>
+    <filter id="emboss" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#3a1015" flood-opacity="0.45"/>
+    </filter>
+    <path id="sealText" d="M100,100 m-66,0 a66,66 0 1,1 132,0 a66,66 0 1,1 -132,0"/>
+  </defs>
+
+  <!-- irregular wax blob -->
+  <g filter="url(#emboss)">
+    <path fill="url(#wax)" d="M100 14
+      c14 0 18 8 31 10 c14 2 23 -6 33 4 c9 9 1 20 4 33 c3 14 12 17 12 33
+      c0 16 -10 19 -13 33 c-3 13 5 24 -5 33 c-9 9 -20 1 -33 4 c-14 3 -17 12 -33 12
+      c-16 0 -19 -10 -33 -13 c-13 -3 -24 5 -33 -5 c-9 -9 -1 -20 -4 -33
+      c-3 -14 -12 -17 -12 -33 c0 -16 9 -19 12 -33 c3 -13 -5 -24 5 -33 c9 -9 20 -1 33 -4
+      c13 -3 17 -11 32 -11 z"/>
+  </g>
+
+  <!-- inner pressed ring -->
+  <circle cx="100" cy="100" r="72" fill="none" stroke="#7e2630" stroke-width="2" opacity="0.55"/>
+  <circle cx="100" cy="100" r="58" fill="url(#waxInner)"/>
+  <circle cx="100" cy="100" r="58" fill="none" stroke="#5f1d25" stroke-width="1.5" opacity="0.5"/>
+
+  <!-- circular text -->
+  <text fill="#f6d9c9" font-family="Georgia, 'Times New Roman', serif" font-size="13" letter-spacing="3" opacity="0.9">
+    <textPath href="#sealText" startOffset="2%">SEALED WITH LOVE · LUV LETTER ·</textPath>
+  </text>
+
+  <!-- monogram -->
+  <text x="100" y="118" text-anchor="middle" fill="#f6d9c9" font-family="'Pinyon Script', 'Brush Script MT', cursive" font-size="64" opacity="0.95">LL</text>
+</svg>
