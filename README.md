@@ -5,12 +5,10 @@ the old Squarespace shop and Acuity scheduling page can both be retired:
 
 - 💅 **The Pressies** — luxury, made-to-order press-on nails (shipped), shown as
   a collectible **postage-stamp sheet** with a "Request your set" postcard form.
-- 📅 **The Appointments** — in-person visits booked through an on-site
-  **scheduler** (anchored by a wax seal): pick a service → pick a date on the
-  calendar → pick an open time slot → enter details. Time slots are generated
-  from the artist's hours. It's a request, not an instant booking: a static
-  site can't see which slots are already taken, so the artist confirms the time
-  by text/email and sends a deposit link to lock it in.
+- 📅 **The Appointments** — in-person visits booked through the artist's real
+  **Acuity scheduler, embedded** right in the page (anchored by a wax seal).
+  Acuity handles live availability, no double-booking, client accounts, and
+  reminders; connected to **Square**, it collects the **$20 deposit**.
 
 The whole site is built around the brand name being *a love letter*: an opening
 note in the hero, postage-stamp press-ons, a wax-seal booking section, and an
@@ -39,49 +37,29 @@ python3 -m http.server 8000
 
 (Or just double-click `index.html` — though the forms behave best over http.)
 
-## ⚙️ Two settings to make it "live"
+## ⚙️ Settings (top of `js/main.js`, the `CONFIG` object)
 
-Both are at the top of **`js/main.js`** in the `CONFIG` object, and they cover
-**both** request forms (press-on "Request your set" and the appointment request):
+- **`ACUITY_URL`** — the artist's Acuity scheduler link (the Book section embeds
+  it). Already set to her existing page. *Best practice:* in Acuity →
+  **Customize Appearance → Scheduling Page Link & Embed Code**, copy the official
+  **embed `<iframe>`** and paste it inside `<div id="acuityEmbed">` in
+  `index.html`; if an iframe is already there, the script leaves it alone.
+- **`SQUARE_PRESSIES_URL`** — her Square store / checkout / payment link for
+  press-on orders. Leave `""` to hide the Square button; set it to show a
+  "Shop & pay on Square" button in the press-on section.
+- **`CONTACT_EMAIL`** — inbox for the press-on request email + mailto links.
+- **`FORM_ENDPOINT`** — where the press-on "Request your set" form delivers.
+  Leave `""` for a pre-filled email, or paste a free
+  [Formspree](https://formspree.io) endpoint to collect submissions online.
 
-1. **`CONTACT_EMAIL`** — the artist's real inbox. Used by the email links and
-   the mailto fallback.
-
-2. **`FORM_ENDPOINT`** — where the forms deliver.
-   - Leave it `""` and a form opens a **pre-filled email** to `CONTACT_EMAIL`
-     (works everywhere, no signup).
-   - To collect submissions online instead, create a **free
-     [Formspree](https://formspree.io) form** and paste its endpoint here, e.g.
-     `"https://formspree.io/f/abcdwxyz"`. Both forms will post to it, each with
-     its own subject line ("Press-on request…" / "Appointment request…").
-
-> Note: this is a request-based flow by design — a pure static site can't show
-> real-time availability or take deposits on its own. The artist confirms each
-> appointment and sends a deposit/pay link (Venmo/CashApp/Stripe) manually.
-
-## 📅 Editing the scheduler (services + hours)
-
-The booking calendar is driven entirely by the **`BOOKING`** object at the top
-of **`js/main.js`** — no other changes needed:
-
-- **`services`** — the list shown in step 1. Edit each entry's `name`, `min`
-  (minutes, which sizes the time slots), `price`, `desc`, and `cat` (category
-  heading). Add or remove entries freely.
-- **`hours`** — weekly availability by weekday (`0`=Sun … `6`=Sat). Each day is
-  a list of `["open","close"]` ranges in 24-hour time; an empty `[]` means
-  closed. Example: `5: [["10:00","19:00"]]` opens Friday 10am–7pm.
-- **`slotMinutes`** — spacing between start times (e.g. 30).
-- **`leadHours`** — how far in advance someone must book (e.g. 24).
-- **`maxDaysAhead`** — how far out the calendar opens (e.g. 60).
-- **`deposit`** — the deposit amount shown at the confirmation step (e.g. 20).
-- **`addons`** — the step-2 "Add to Appointment" options (length, nail type,
-  design level, removals, repairs, fees, etc.). Each has a `group`, `name`,
-  `price` (± dollars), and `min` (± minutes). Selecting add-ons updates the
-  appointment length **and** the price estimate, and the longer length is
-  honored when generating time slots.
-
-The calendar greys out days with no availability and only offers slots that fit
-the selected service's duration within your hours.
+### Live availability + the $20 deposit (done in her accounts, not code)
+The booking calendar, availability, client accounts, reminders, and deposit are
+all handled by **Acuity + Square** — nothing to run or maintain here:
+1. In **Acuity → Integrations**, connect her **Square** account.
+2. On each appointment type in Acuity, set the **$20 deposit** so the embedded
+   scheduler collects it through Square at booking.
+3. Edit services, prices, durations, hours, and add-ons **in Acuity** (they show
+   up automatically in the embed).
 
 ## Swap in the real photos
 
@@ -107,8 +85,8 @@ dashboard.
 
 - [ ] Replace placeholder photos with real Instagram images.
 - [ ] Confirm press-on **design names + prices** (in `index.html`, `pressies` section).
-- [ ] Confirm booking **services + prices + durations** and **weekly hours**
-      (the `BOOKING` object in `js/main.js`).
-- [ ] Confirm **shipping turnaround**, **deposit amount**, and
-      **appointment/cancellation policies** (FAQ + booking copy).
+- [ ] In **Acuity**, connect **Square** and set the **$20 deposit** on appointment
+      types; paste her official Acuity embed into `#acuityEmbed` (or keep `ACUITY_URL`).
+- [ ] Set **`SQUARE_PRESSIES_URL`** to her Square store/checkout for press-ons.
+- [ ] Confirm **shipping turnaround** and **policies** (FAQ + booking copy).
 - [ ] Set `CONTACT_EMAIL` and choose a `FORM_ENDPOINT` (or keep mailto).

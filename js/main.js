@@ -1,122 +1,27 @@
 /* =========================================================
    Luv Letter — interactions
    ---------------------------------------------------------
-   ⚙️  CLIENT CONFIG — edit CONFIG (contact) and BOOKING (services + hours).
+   ⚙️  CLIENT CONFIG — the few values you may want to change.
    ========================================================= */
 const CONFIG = {
-  // Where the request forms send (press-on "Request your set" AND the booking
-  // request). Leave as "" to use the email (mailto) fallback. To collect
-  // submissions online, create a free Formspree form (https://formspree.io)
-  // and paste its endpoint here, e.g. "https://formspree.io/f/abcdwxyz".
+  // The artist's live Acuity scheduler — the Book section embeds this, so it
+  // shows real availability and (with Square connected in Acuity) takes the $20
+  // deposit. Replace with her exact Acuity link if it changes. Prefer pasting
+  // her official embed <iframe> straight into #acuityEmbed in index.html — if an
+  // iframe is already there, this is left alone.
+  ACUITY_URL: "https://luvletternails.as.me/schedule/ea9af220",
+
+  // Her Square store / checkout / payment link for press-on orders. Leave "" to
+  // hide the Square button (press-ons stay a request form only).
+  SQUARE_PRESSIES_URL: "",
+
+  // Where the press-on "Request your set" form sends. "" → opens a pre-filled
+  // email to CONTACT_EMAIL. To collect online, paste a free Formspree endpoint
+  // (https://formspree.io), e.g. "https://formspree.io/f/abcdwxyz".
   FORM_ENDPOINT: "",
 
-  // Inbox the postcard / mailto fallback writes to.
+  // Inbox for the email links + mailto fallback.
   CONTACT_EMAIL: "hello@luvletternails.com",
-};
-
-/* ---------------------------------------------------------
-   BOOKING — the in-studio scheduler. Edit these to match the
-   artist's real services and hours; the calendar + time slots
-   are generated from this automatically.
-   NOTE: this is a request-based scheduler (a static site can't
-   see which slots are already taken). The artist confirms each
-   request and deconflicts before charging a deposit.
-   --------------------------------------------------------- */
-const BOOKING = {
-  // Step 1 services. Edit name / min (minutes) / price / desc / cat freely.
-  services: [
-    // ----- Copycat Sets -----
-    { cat: "Copycat Sets", name: "Gel Polish Mani", min: 60, price: "$70", desc: "Dry manicure, shaping & gel polish on natural nails — no extensions. Lasts 4+ weeks." },
-    { cat: "Copycat Sets", name: "Structured Mani", min: 120, price: "$90", desc: "Builder-gel structured manicure on natural nails — adds strength, no extensions." },
-    { cat: "Copycat Sets", name: "Gel-X", min: 120, price: "$90", desc: "Sleek full set with soft-gel full-cover tips — sturdy yet gentle on your natural nail." },
-    { cat: "Copycat Sets", name: "Sculpted", min: 150, price: "$100", desc: "Sculpted full set in builder gel, polygel, or hard gel — for nails needing extra TLC." },
-
-    // ----- LuvLetter Freestylez -----
-    { cat: "LuvLetter Freestylez", name: "Design Lvl Freestyle", min: 150, price: "$95", desc: "Gel polish, BIAB, or full set with a freestyle design (non-nail inspo welcome)." },
-    { cat: "LuvLetter Freestylez", name: "TrueLuv Freestyle", min: 210, price: "$125", desc: "A true freestyle — you give me full creative control of the design." },
-    { cat: "LuvLetter Freestylez", name: "Moodboard Freestyle", min: 240, price: "$150", desc: "Send a Pinterest board, collage, or 4+ pics and I'll design from your moodboard." },
-    { cat: "LuvLetter Freestylez", name: "Mystery Mani", min: 180, price: "$115", desc: "Pick your design the fun way — a random design from the gumball machine!" },
-
-    // ----- Special Sets -----
-    { cat: "Special Sets", name: "Character Set", min: 210, price: "varies", desc: "Gel polish, BIAB, or full set featuring multiple hand-drawn character designs." },
-    { cat: "Special Sets", name: "3D Sculpted Set", min: 270, price: "varies", desc: "Gel polish, BIAB, or full set with complex hand-sculpted 3D designs." },
-    { cat: "Special Sets", name: "Nail Date", min: 300, price: "$160", desc: "Bring a bestie or boo! Two guests get sets together — save on your appointment." },
-
-    // ----- Other Services -----
-    { cat: "Other Services", name: "Press-Ons Application", min: 60, price: "$10", desc: "Application of a LuvLetter Pressies set — cuticle care, shaping & application." },
-    { cat: "Other Services", name: "Press-Ons Sizing", min: 30, price: "$5", desc: "Get sized for press-ons (free if sized during another nail service)." },
-    { cat: "Other Services", name: "Design Change", min: 30, price: "$10", desc: "Not feeling your design but too early for a fill? Swap it out." },
-    { cat: "Other Services", name: "Removal", min: 30, price: "$5", desc: "Soak-off / removal of my work or another tech's work. Add-ons may apply." },
-    { cat: "Other Services", name: "Repair / Replacement", min: 10, price: "varies", desc: "Repair or replacement of broken, chipped, or missing nails." },
-  ],
-
-  // Weekly hours by weekday (0=Sun … 6=Sat). Each day is a list of [open, close]
-  // ranges in 24h "HH:MM". An empty list means closed that day.
-  hours: {
-    0: [["11:00", "19:00"]],     // Sunday   11–7
-    1: [],                       // Monday   — closed
-    2: [["09:00", "21:00"]],     // Tuesday  9–9
-    3: [["09:00", "21:00"]],     // Wednesday 9–9
-    4: [["09:00", "21:00"]],     // Thursday 9–9
-    5: [],                       // Friday   — closed
-    6: [["11:00", "19:00"]],     // Saturday 11–7
-  },
-
-  slotMinutes: 30,   // spacing between appointment start times
-  leadHours: 24,     // earliest you can request from "now"
-  maxDaysAhead: 60,  // how far ahead the calendar opens
-  deposit: 20,       // non-refundable deposit (shown at confirmation)
-
-  // Add-ons shown in step 2 (after picking a service). Selecting one adjusts the
-  // appointment length (min, can be negative) and the price estimate (price, $).
-  addons: [
-    { group: "Length", name: "XS", price: -5, min: 0 },
-    { group: "Length", name: "Short", price: 0, min: 0 },
-    { group: "Length", name: "Medium", price: 5, min: 0 },
-    { group: "Length", name: "Long", price: 10, min: 0 },
-    { group: "Length", name: "XL", price: 20, min: 30 },
-    { group: "Length", name: "XXL", price: 25, min: 30 },
-
-    { group: "Nail type", name: "Gel polish", price: -20, min: -30 },
-    { group: "Nail type", name: "BIAB", price: 0, min: -30 },
-    { group: "Nail type", name: "Gel-X", price: 0, min: 0 },
-    { group: "Nail type", name: "Sculpted", price: 10, min: 30 },
-
-    { group: "Design level", name: "Level 1", price: 0, min: 30 },
-    { group: "Design level", name: "Level 2", price: 15, min: 60 },
-    { group: "Design level", name: "Level 3", price: 30, min: 90 },
-    { group: "Design level", name: "Level 4", price: 55, min: 120 },
-
-    { group: "Maintenance", name: "Fill (2–4 wks)", price: -5, min: 0 },
-    { group: "Maintenance", name: "Rebalance (5–6 wks)", price: 0, min: 0 },
-    { group: "Maintenance", name: "Reshaping", price: 5, min: 0 },
-    { group: "Maintenance", name: "Press-ons sizing", price: 0, min: 20 },
-
-    { group: "Removal (my work)", name: "Regularz removal", price: 0, min: 60 },
-    { group: "Removal (my work)", name: "Gel polish", price: 5, min: 30 },
-    { group: "Removal (my work)", name: "Gel-X / soft gel", price: 5, min: 60 },
-    { group: "Removal (my work)", name: "Hard gel / polygel", price: 10, min: 60 },
-    { group: "Removal (my work)", name: "Press-ons", price: 5, min: 30 },
-
-    { group: "Removal (other tech)", name: "Gel polish", price: 5, min: 30 },
-    { group: "Removal (other tech)", name: "Gel-X / soft gel", price: 10, min: 60 },
-    { group: "Removal (other tech)", name: "Hard gel / polygel", price: 15, min: 60 },
-    { group: "Removal (other tech)", name: "Acrylic / dip", price: 20, min: 60 },
-
-    { group: "Repair", name: "1 nail", price: 5, min: 15 },
-    { group: "Repair", name: "2 nails", price: 10, min: 30 },
-    { group: "Repair", name: "3 nails", price: 15, min: 45 },
-    { group: "Repair", name: "4 nails", price: 20, min: 60 },
-
-    { group: "Replacement", name: "1 nail", price: 10, min: 15 },
-    { group: "Replacement", name: "2 nails", price: 15, min: 30 },
-    { group: "Replacement", name: "3 nails", price: 20, min: 45 },
-    { group: "Replacement", name: "4 nails", price: 25, min: 60 },
-
-    { group: "Fees", name: "Before/after hours", price: 30, min: 0 },
-    { group: "Fees", name: "Late night", price: 15, min: 0 },
-    { group: "Fees", name: "Off-day", price: 50, min: 0 },
-  ],
 };
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -125,10 +30,10 @@ document.addEventListener("DOMContentLoaded", () => {
   initReveal();
   initStamps();
   initMailto();
+  initSquare();
+  initAcuity();
   // Press-on "Request your set" form.
   wireForm("requestForm", "formMsg", "Press-on request");
-  // In-studio scheduler (service → date → time → details).
-  initBooker();
 });
 
 /* ---------- Footer year ---------- */
@@ -177,7 +82,7 @@ function initReveal() {
   els.forEach((el) => io.observe(el));
 }
 
-/* ---------- Stamp picker ---------- */
+/* ---------- Stamp picker (press-on designs) ---------- */
 function initStamps() {
   const sheet = document.getElementById("stampSheet");
   if (!sheet) return;
@@ -208,6 +113,47 @@ function initMailto() {
   document.querySelectorAll(".js-mailto").forEach((a) => {
     a.href = `mailto:${CONFIG.CONTACT_EMAIL}`;
   });
+}
+
+/* ---------- Square press-on payments ---------- */
+function initSquare() {
+  const url = CONFIG.SQUARE_PRESSIES_URL;
+  if (!url) return; // no link set → keep the Square button hidden
+  document.querySelectorAll(".js-square").forEach((a) => { a.href = url; });
+  const cta = document.getElementById("squareCta");
+  if (cta) cta.hidden = false;
+}
+
+/* ---------- Acuity scheduler embed (in-person booking) ---------- */
+function initAcuity() {
+  const mount = document.getElementById("acuityEmbed");
+  if (!mount) return;
+
+  const fallback = document.getElementById("acuityFallback");
+  if (fallback) fallback.href = CONFIG.ACUITY_URL;
+
+  // If the client pasted their official Acuity embed (an <iframe>), leave it.
+  if (mount.querySelector("iframe")) return;
+
+  const iframe = document.createElement("iframe");
+  iframe.src = CONFIG.ACUITY_URL;
+  iframe.title = "Book an appointment with Luv Letter";
+  iframe.width = "100%";
+  iframe.height = "800";
+  iframe.frameBorder = "0";
+  iframe.loading = "lazy";
+  iframe.setAttribute("allow", "payment");
+  mount.innerHTML = "";
+  mount.appendChild(iframe);
+
+  // Acuity's helper auto-resizes the iframe to fit its content.
+  if (!document.getElementById("acuity-embed-js")) {
+    const s = document.createElement("script");
+    s.id = "acuity-embed-js";
+    s.src = "https://embed.acuityscheduling.com/js/embed.js";
+    s.async = true;
+    document.body.appendChild(s);
+  }
 }
 
 /* ---------- Shared request delivery ----------
@@ -278,390 +224,4 @@ function wireForm(formId, msgId, subjectPrefix) {
     if (result === "sent") { form.reset(); say("Sent with love! I’ll write back soon. 💌", "ok"); }
     else if (result === "mailto") { say("Opening your email to send the request… 💌", "ok"); }
   });
-}
-
-/* ---------- In-studio scheduler ----------
-   Service → calendar date → available time slot → details. Slots are generated
-   from BOOKING.hours / slotMinutes / leadHours, scoped to the chosen service's
-   duration. Submits as a request (see note on BOOKING).
-*/
-function initBooker() {
-  const root = document.getElementById("booker");
-  if (!root) return;
-
-  // LIVE = Supabase configured → real availability, logins, no double-booking.
-  // Otherwise the scheduler runs in request mode (emails you, like before).
-  const LIVE = !!(window.LLBooking && window.LLBooking.enabled);
-  const state = { service: null, addons: [], date: null, time: null, busy: [], pendingEmail: null };
-  const panels = root.querySelectorAll(".booker__panel");
-  const steps = root.querySelectorAll(".booker__steps li");
-  let currentStep = 1;
-
-  const show = (n) => {
-    currentStep = n;
-    panels.forEach((p) => (p.hidden = p.dataset.panel !== String(n)));
-    steps.forEach((s) => s.classList.toggle("is-active", +s.dataset.step <= n));
-    root.scrollIntoView({ behavior: "smooth", block: "start" });
-  };
-
-  // date/time helpers
-  const pad = (x) => String(x).padStart(2, "0");
-  const toMin = (t) => { const [h, m] = t.split(":").map(Number); return h * 60 + m; };
-  const fmt12 = (t) => { let [h, m] = t.split(":").map(Number); const ap = h < 12 ? "AM" : "PM"; h = h % 12 || 12; return `${h}:${pad(m)} ${ap}`; };
-  const sameDay = (a, b) => a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
-  const monthLabel = (d) => d.toLocaleDateString(undefined, { month: "long", year: "numeric" });
-  const longDate = (d) => d.toLocaleDateString(undefined, { weekday: "long", month: "long", day: "numeric" });
-  const fmtDur = (m) => { const h = Math.floor(m / 60), mm = m % 60; return h && mm ? `${h} hr ${mm} min` : h ? `${h} hr` : `${mm} min`; };
-
-  const today = new Date(); today.setHours(0, 0, 0, 0);
-  const maxDate = new Date(today); maxDate.setDate(maxDate.getDate() + BOOKING.maxDaysAhead);
-
-  // appointment length + price include any selected add-ons
-  const apptDuration = () => (state.service ? state.service.min : 0) + state.addons.reduce((s, a) => s + a.min, 0);
-  const apptAddonPrice = () => state.addons.reduce((s, a) => s + a.price, 0);
-  const priceEstimate = () => {
-    const base = parseFloat(String(state.service.price).replace(/[^0-9.]/g, ""));
-    const addon = apptAddonPrice();
-    if (isNaN(base)) return "varies";
-    return `~$${base + addon}`;
-  };
-
-  // does [startMs, endMs) collide with any already-taken/blocked range?
-  const overlapsBusy = (startMs, endMs) => state.busy.some((b) => startMs < b.end && endMs > b.start);
-
-  const slotsFor = (date) => {
-    if (!state.service) return [];
-    const ranges = BOOKING.hours[date.getDay()] || [];
-    const lead = Date.now() + BOOKING.leadHours * 3600e3;
-    const dur = apptDuration();
-    const out = [];
-    for (const [open, close] of ranges) {
-      for (let t = toMin(open); t + dur <= toMin(close); t += BOOKING.slotMinutes) {
-        const dt = new Date(date); dt.setHours(0, 0, 0, 0); dt.setMinutes(t);
-        const startMs = dt.getTime(), endMs = startMs + dur * 60000;
-        if (startMs >= lead && !overlapsBusy(startMs, endMs)) {
-          out.push(`${pad(Math.floor(t / 60))}:${pad(t % 60)}`);
-        }
-      }
-    }
-    return out;
-  };
-  const monthHasOpen = (v) => {
-    const y = v.getFullYear(), m = v.getMonth(), days = new Date(y, m + 1, 0).getDate();
-    for (let d = 1; d <= days; d++) {
-      const date = new Date(y, m, d);
-      if (date >= today && date <= maxDate && slotsFor(date).length > 0) return true;
-    }
-    return false;
-  };
-
-  // pull taken/blocked ranges from Supabase (live mode); no-op otherwise
-  async function refreshBusy() {
-    if (!LIVE) { state.busy = []; return; }
-    try {
-      const rows = await window.LLBooking.busyRanges(today.toISOString(), maxDate.toISOString());
-      state.busy = rows.map((r) => ({ start: Date.parse(r.start_ts), end: Date.parse(r.end_ts) }));
-    } catch (e) { state.busy = []; }
-  }
-  // build the appointment's start/end as ISO for the DB
-  const apptISO = () => {
-    const [h, m] = state.time.split(":").map(Number);
-    const start = new Date(state.date); start.setHours(h, m, 0, 0);
-    const end = new Date(start.getTime() + apptDuration() * 60000);
-    return { start: start.toISOString(), end: end.toISOString() };
-  };
-
-  /* ----- Step 1: services ----- */
-  const svcList = document.getElementById("svcList");
-  const cats = [];
-  BOOKING.services.forEach((s) => { if (!cats.includes(s.cat)) cats.push(s.cat); });
-  svcList.innerHTML = cats.map((cat) => {
-    const items = BOOKING.services
-      .map((s, i) => ({ s, i }))
-      .filter((x) => x.s.cat === cat)
-      .map(({ s, i }) => `
-        <button class="svc" type="button" data-svc="${i}">
-          <span class="svc__main">
-            <span class="svc__name">${s.name}</span>
-            ${s.desc ? `<span class="svc__desc">${s.desc}</span>` : ""}
-          </span>
-          <span class="svc__meta"><span class="svc__price">${s.price}</span><span class="svc__dur">${fmtDur(s.min)}</span></span>
-        </button>`).join("");
-    return `<div class="svc-cat"><h4 class="svc-cat__title">${cat}</h4>${items}</div>`;
-  }).join("");
-
-  svcList.querySelectorAll(".svc").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      state.service = BOOKING.services[+btn.dataset.svc];
-      state.addons = []; state.date = null; state.time = null;
-      renderAddons();
-      updateChosen();
-      show(2);
-    });
-  });
-
-  /* ----- Step 2: add-ons ----- */
-  const addonList = document.getElementById("addonList");
-  const chosenEls = root.querySelectorAll(".js-chosen");
-
-  const fmtDelta = (a) => {
-    const parts = [];
-    if (a.price) parts.push(`${a.price > 0 ? "+" : "−"}$${Math.abs(a.price)}`);
-    if (a.min) parts.push(`${a.min > 0 ? "+" : "−"}${fmtDur(Math.abs(a.min))}`);
-    return parts.join(" · ") || "included";
-  };
-  const updateChosen = () => {
-    if (!state.service) return;
-    const est = priceEstimate();
-    const txt = `${state.service.name} · ${fmtDur(apptDuration())}${est ? " · " + est : ""}`;
-    chosenEls.forEach((el) => (el.textContent = txt));
-  };
-  function renderAddons() {
-    const groups = [];
-    BOOKING.addons.forEach((a) => { if (!groups.includes(a.group)) groups.push(a.group); });
-    addonList.innerHTML = groups.map((g) => {
-      const chips = BOOKING.addons
-        .map((a, i) => ({ a, i }))
-        .filter((x) => x.a.group === g)
-        .map(({ a, i }) => `<button class="addon" type="button" data-addon="${i}"><span class="addon__name">${a.name}</span><span class="addon__delta">${fmtDelta(a)}</span></button>`)
-        .join("");
-      return `<div class="addon-group"><h5 class="addon-group__title">${g}</h5><div class="addon-group__chips">${chips}</div></div>`;
-    }).join("");
-    addonList.querySelectorAll(".addon").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const a = BOOKING.addons[+btn.dataset.addon];
-        const idx = state.addons.indexOf(a);
-        if (idx >= 0) { state.addons.splice(idx, 1); btn.classList.remove("is-on"); }
-        else { state.addons.push(a); btn.classList.add("is-on"); }
-        updateChosen();
-      });
-    });
-  }
-
-  const addonsNextBtn = document.getElementById("addonsNext");
-  addonsNextBtn.addEventListener("click", async () => {
-    state.date = null; state.time = null;
-    if (LIVE) { addonsNextBtn.disabled = true; await refreshBusy(); addonsNextBtn.disabled = false; }
-    view = new Date(); view.setDate(1);
-    let guard = 0;
-    while (!monthHasOpen(view) && view < maxDate && guard++ < 14) view.setMonth(view.getMonth() + 1);
-    slotsWrap.hidden = true;
-    renderCal();
-    show(3);
-  });
-
-  /* ----- Step 3: calendar + slots ----- */
-  let view = new Date(); view.setDate(1);
-  const calGrid = document.getElementById("calGrid");
-  const calTitle = document.getElementById("calTitle");
-  const calPrev = document.getElementById("calPrev");
-  const calNext = document.getElementById("calNext");
-  const slotsWrap = document.getElementById("slots");
-  const slotsGrid = document.getElementById("slotsGrid");
-  const slotsLabel = document.getElementById("slotsLabel");
-
-  function renderCal() {
-    calTitle.textContent = monthLabel(view);
-    const y = view.getFullYear(), m = view.getMonth();
-    const first = new Date(y, m, 1).getDay();
-    const days = new Date(y, m + 1, 0).getDate();
-    let cells = "";
-    for (let i = 0; i < first; i++) cells += `<span class="cal__cell is-empty"></span>`;
-    for (let d = 1; d <= days; d++) {
-      const date = new Date(y, m, d);
-      const open = date >= today && date <= maxDate && slotsFor(date).length > 0;
-      const sel = state.date && sameDay(date, state.date);
-      cells += `<button class="cal__cell${open ? "" : " is-disabled"}${sel ? " is-selected" : ""}" type="button" ${open ? `data-day="${y}-${pad(m + 1)}-${pad(d)}"` : "disabled"}>${d}</button>`;
-    }
-    calGrid.innerHTML = cells;
-    calPrev.disabled = (y === today.getFullYear() && m <= today.getMonth());
-    calNext.disabled = new Date(y, m, 1) >= new Date(maxDate.getFullYear(), maxDate.getMonth(), 1);
-    calGrid.querySelectorAll("[data-day]").forEach((cell) => {
-      cell.addEventListener("click", () => {
-        const [yy, mm, dd] = cell.dataset.day.split("-").map(Number);
-        state.date = new Date(yy, mm - 1, dd);
-        state.time = null;
-        renderCal();
-        renderSlots();
-      });
-    });
-  }
-
-  function renderSlots() {
-    const list = slotsFor(state.date);
-    slotsLabel.textContent = `Times for ${longDate(state.date)}`;
-    slotsGrid.innerHTML = list.map((t) => `<button class="slot" type="button" data-time="${t}">${fmt12(t)}</button>`).join("");
-    slotsWrap.hidden = false;
-    slotsGrid.querySelectorAll(".slot").forEach((b) => {
-      b.addEventListener("click", () => { state.time = b.dataset.time; renderSummary(); show(4); });
-    });
-    slotsWrap.scrollIntoView({ behavior: "smooth", block: "nearest" });
-  }
-
-  calPrev.addEventListener("click", () => { view.setMonth(view.getMonth() - 1); renderCal(); });
-  calNext.addEventListener("click", () => { view.setMonth(view.getMonth() + 1); renderCal(); });
-
-  /* ----- Step 4: summary + submit ----- */
-  const summary = document.getElementById("bookSummary");
-  function renderSummary() {
-    const addonRows = state.addons
-      .map((a) => `<div class="summary-row summary-row--sub"><span>+ ${a.group}: ${a.name}</span><strong>${fmtDelta(a)}</strong></div>`)
-      .join("");
-    summary.innerHTML = `
-      <div class="summary-row"><span>Service</span><strong>${state.service.name}</strong></div>
-      ${addonRows}
-      <div class="summary-row"><span>Total time</span><strong>${fmtDur(apptDuration())}</strong></div>
-      <div class="summary-row"><span>Est. price</span><strong>${priceEstimate()}</strong></div>
-      <div class="summary-row"><span>Date</span><strong>${longDate(state.date)}</strong></div>
-      <div class="summary-row"><span>Time</span><strong>${fmt12(state.time)}</strong></div>
-      <div class="summary-row summary-row--note"><span>Deposit at booking</span><strong>$${BOOKING.deposit}</strong></div>`;
-  }
-
-  root.querySelectorAll("[data-back]").forEach((b) =>
-    b.addEventListener("click", () => show(+b.dataset.back))
-  );
-
-  /* ----- auth + submit ----- */
-  const form = document.getElementById("bookingForm");
-  const say = makeSay(document.getElementById("bookingMsg"));
-  const submitBtn = document.getElementById("bookingSubmit");
-  const otpBox = document.getElementById("bookerOtp");
-  const otpInput = document.getElementById("b-otp");
-  const verifyBtn = document.getElementById("bookingVerify");
-  const resendBtn = document.getElementById("bookingResend");
-  const finePrint = document.getElementById("bookingFinePrint");
-  const accountBar = document.getElementById("bookerAccount");
-
-  // In live mode the slot is actually reserved → adjust the copy.
-  if (LIVE) {
-    submitBtn.textContent = "Confirm booking";
-    if (finePrint)
-      finePrint.innerHTML =
-        `Your time is reserved the moment you confirm. I’ll follow up about the $${BOOKING.deposit} deposit. ` +
-        `Questions? DM <a href="https://www.instagram.com/luvletternails" target="_blank" rel="noopener">@luvletternails</a>.`;
-  }
-
-  function gatherData() {
-    const data = new FormData(form);
-    data.set("service", state.service.name);
-    if (state.addons.length) data.set("addons", state.addons.map((a) => `${a.group}: ${a.name}`).join(", "));
-    data.set("duration", fmtDur(apptDuration()));
-    data.set("base_price", state.service.price);
-    data.set("estimate", priceEstimate());
-    data.set("date", longDate(state.date));
-    data.set("time", fmt12(state.time));
-    data.set("deposit", `$${BOOKING.deposit}`);
-    return data;
-  }
-  function validate(data) {
-    if (!state.service || !state.date || !state.time) {
-      say("Please pick a service, date, and time first.", "err"); show(1); return null;
-    }
-    const name = (data.get("name") || "").toString().trim();
-    const email = (data.get("email") || "").toString().trim();
-    if (!name || !email || !EMAIL_RE.test(email)) {
-      say("Please add your name and a valid email so I can confirm. 💌", "err"); return null;
-    }
-    return { name, email };
-  }
-
-  // write the booking to Supabase (caller ensures the user is signed in)
-  async function commitBooking() {
-    const data = gatherData();
-    const { start, end } = apptISO();
-    const { error, taken } = await window.LLBooking.createBooking({
-      name: (data.get("name") || "").toString().trim(),
-      phone: (data.get("phone") || "").toString().trim(),
-      service_name: data.get("service"),
-      addons: state.addons.map((a) => ({ group: a.group, name: a.name, price: a.price, min: a.min })),
-      start_ts: start,
-      end_ts: end,
-      price_estimate: priceEstimate(),
-      notes: [data.get("addons") ? "Add-ons: " + data.get("addons") : "", (data.get("notes") || "").toString()].filter(Boolean).join("\n"),
-    });
-    if (taken) {
-      say("Ah — someone just grabbed that time. Pick another and you’re set. 💔", "err");
-      await refreshBusy(); renderCal(); show(3); return;
-    }
-    if (error) { say(error.message || "Couldn’t book that — please try again.", "err"); return; }
-    if (otpBox) otpBox.hidden = true;
-    form.reset();
-    say(`Booked! You’re set for ${longDate(state.date)} at ${fmt12(state.time)}. Check your email for confirmation. 💌`, "ok");
-    await refreshBusy();
-    renderAccount(await window.LLBooking.getUser());
-  }
-
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const data = gatherData();
-    const v = validate(data);
-    if (!v) return;
-
-    // request mode (no Supabase configured) → email / Formspree, like before
-    if (!LIVE) {
-      const result = await deliverRequest(data, "Appointment request", v.name, say);
-      if (result === "sent") { form.reset(); say(`Requested! I’ll confirm ${longDate(state.date)} at ${fmt12(state.time)} by text or email. 💌`, "ok"); }
-      else if (result === "mailto") { say(`Opening your email — hit send to request ${longDate(state.date)} at ${fmt12(state.time)}. 💌`, "ok"); }
-      return;
-    }
-
-    // live mode: already signed in? book now. otherwise email a sign-in code first.
-    const user = await window.LLBooking.getUser();
-    if (user) { say("Booking your spot…", ""); await commitBooking(); return; }
-    say("Emailing you a 6-digit sign-in code…", "");
-    const { error } = await window.LLBooking.sendCode(v.email);
-    if (error) { say(error.message || "Couldn’t send the code — try again.", "err"); return; }
-    state.pendingEmail = v.email;
-    if (otpBox) { otpBox.hidden = false; otpInput.focus(); }
-    say("Check your email for a 6-digit code, enter it below, and you’re booked.", "ok");
-  });
-
-  if (verifyBtn) {
-    verifyBtn.addEventListener("click", async () => {
-      const code = (otpInput.value || "").trim();
-      if (code.length < 6) { say("Enter the 6-digit code from your email.", "err"); return; }
-      say("Verifying…", "");
-      const { error } = await window.LLBooking.verifyCode(state.pendingEmail, code);
-      if (error) { say("That code didn’t match — double-check it or resend.", "err"); return; }
-      await commitBooking();
-    });
-    otpInput.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); verifyBtn.click(); } });
-  }
-  if (resendBtn) {
-    resendBtn.addEventListener("click", async () => {
-      if (!state.pendingEmail) return;
-      say("Resending your code…", "");
-      const { error } = await window.LLBooking.sendCode(state.pendingEmail);
-      say(error ? "Couldn’t resend — try again." : "Sent! Check your email.", error ? "err" : "ok");
-    });
-  }
-
-  /* ----- account bar + realtime (live mode) ----- */
-  function renderAccount(user) {
-    if (!LIVE || !accountBar) return;
-    accountBar.hidden = false;
-    if (user) {
-      accountBar.innerHTML =
-        `<span>Signed in as <strong>${user.email}</strong></span>` +
-        `<button type="button" class="booker__back" id="signOutBtn">Sign out</button>`;
-      const emailField = document.getElementById("b-email");
-      if (emailField && !emailField.value) emailField.value = user.email;
-      const so = document.getElementById("signOutBtn");
-      if (so) so.addEventListener("click", () => window.LLBooking.signOut());
-    } else {
-      accountBar.innerHTML = `<span>You’ll sign in with a quick email code when you book — that’s your account.</span>`;
-    }
-  }
-
-  if (LIVE) {
-    window.LLBooking.onAuth((user) => renderAccount(user));
-    if (window.LLBooking.onBusyChange) {
-      window.LLBooking.onBusyChange(async () => {
-        await refreshBusy();
-        if (currentStep === 3) { renderCal(); if (state.date && !slotsWrap.hidden) renderSlots(); }
-      });
-    }
-  }
-
-  renderCal();
 }

@@ -182,6 +182,10 @@
             <li><strong>Reusable</strong> — sturdy builder-gel layers, worn again &amp; again.</li>
             <li><strong>Sized to you</strong> — sizing kit available for the perfect fit.</li>
           </ul>
+          <!-- Square store / checkout (shown by JS when SQUARE_PRESSIES_URL is set) -->
+          <p class="request__square" id="squareCta" hidden>
+            Ready to order? <a class="btn btn--primary js-square" href="#" target="_blank" rel="noopener">Shop &amp; pay on Square ↗</a>
+          </p>
         </div>
 
         <form class="postcard reveal" id="requestForm" novalidate>
@@ -256,9 +260,8 @@
       <p class="eyebrow">By appointment</p>
       <h2 class="section-title">Book your seat in the studio</h2>
       <p class="section-lead">
-        Pick a service and any add-ons, choose a date and time, and send your
-        request. I&rsquo;ll confirm by text or email and share your deposit link to
-        lock it in. Sealed with love.
+        Pick your service, choose a time that works, and reserve it right here.
+        Real-time availability with a $20 deposit to lock it in. Sealed with love.
       </p>
 
       <!-- Before you book — the real process -->
@@ -271,101 +274,15 @@
           the <strong>$20 non-refundable deposit</strong> (it comes off your total).</p>
       </div>
 
-      <div class="booker reveal" id="booker">
-        <!-- account bar (live mode only; filled by JS) -->
-        <div class="booker__account" id="bookerAccount" hidden></div>
-
-        <!-- progress -->
-        <ol class="booker__steps">
-          <li data-step="1" class="is-active"><span>1</span> Service</li>
-          <li data-step="2"><span>2</span> Add-ons</li>
-          <li data-step="3"><span>3</span> Date &amp; time</li>
-          <li data-step="4"><span>4</span> Details</li>
-        </ol>
-
-        <!-- Step 1: pick a service -->
-        <div class="booker__panel" data-panel="1">
-          <div class="svc-list" id="svcList"><!-- services injected by JS --></div>
-        </div>
-
-        <!-- Step 2: add-ons -->
-        <div class="booker__panel" data-panel="2" hidden>
-          <button class="booker__back" type="button" data-back="1">← Change service</button>
-          <p class="booker__chosen js-chosen"></p>
-          <p class="addons__hint">Optional — add only what we discussed in your DM consultation.</p>
-          <div class="addon-list" id="addonList"><!-- add-ons injected by JS --></div>
-          <button class="btn btn--primary btn--block" type="button" id="addonsNext">Continue to date &amp; time →</button>
-        </div>
-
-        <!-- Step 3: pick date + time -->
-        <div class="booker__panel" data-panel="3" hidden>
-          <button class="booker__back" type="button" data-back="2">← Back to add-ons</button>
-          <p class="booker__chosen js-chosen"></p>
-          <div class="cal">
-            <div class="cal__head">
-              <button class="cal__nav" id="calPrev" type="button" aria-label="Previous month">‹</button>
-              <span class="cal__title" id="calTitle"></span>
-              <button class="cal__nav" id="calNext" type="button" aria-label="Next month">›</button>
-            </div>
-            <div class="cal__dow" aria-hidden="true">
-              <span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span>
-            </div>
-            <div class="cal__grid" id="calGrid" role="grid"><!-- days injected by JS --></div>
-          </div>
-          <div class="slots" id="slots" hidden>
-            <p class="slots__label" id="slotsLabel"></p>
-            <div class="slots__grid" id="slotsGrid"><!-- times injected by JS --></div>
-          </div>
-        </div>
-
-        <!-- Step 4: details -->
-        <div class="booker__panel" data-panel="4" hidden>
-          <button class="booker__back" type="button" data-back="3">← Change date/time</button>
-          <form class="postcard booker__form" id="bookingForm" novalidate>
-            <p class="postcard__stamp" aria-hidden="true">appt<br />card</p>
-            <h3 class="postcard__title script">Almost sealed</h3>
-            <div class="booker__summary" id="bookSummary"><!-- summary injected by JS --></div>
-
-            <div class="field-row">
-              <div class="field">
-                <label for="b-name">Your name</label>
-                <input id="b-name" name="name" type="text" autocomplete="name" required />
-              </div>
-              <div class="field">
-                <label for="b-phone">Phone (for texts)</label>
-                <input id="b-phone" name="phone" type="tel" autocomplete="tel" />
-              </div>
-            </div>
-            <div class="field">
-              <label for="b-email">Email</label>
-              <input id="b-email" name="email" type="email" autocomplete="email" required />
-            </div>
-            <div class="field">
-              <label for="b-notes">Anything else? (inspo, occasion, current nails)</label>
-              <textarea id="b-notes" name="notes" rows="3" placeholder="Tell me what you have in mind…"></textarea>
-            </div>
-
-            <button class="btn btn--primary btn--block" type="submit" id="bookingSubmit">Send my request</button>
-
-            <!-- sign-in code (live mode only; shown by JS when a code is emailed) -->
-            <div class="booker__otp" id="bookerOtp" hidden>
-              <label for="b-otp">Enter the 6-digit code we emailed you</label>
-              <div class="booker__otp-row">
-                <input id="b-otp" name="otp" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" />
-                <button class="btn btn--primary" type="button" id="bookingVerify">Verify &amp; book</button>
-              </div>
-              <button class="booker__back" type="button" id="bookingResend">Resend code</button>
-            </div>
-
-            <p class="postcard__msg" id="bookingMsg" role="status" aria-live="polite"></p>
-            <p class="postcard__fineprint" id="bookingFinePrint">
-              This is a request, not an instant booking — I&rsquo;ll confirm your time by
-              text or email. Prefer to reach out directly? Write to
-              <a class="js-mailto" href="#">hello@luvletternails.com</a>.
-            </p>
-          </form>
-        </div>
+      <!-- Live scheduler — the artist's Acuity, embedded (injected by JS). -->
+      <div class="book__embed reveal" id="acuityEmbed">
+        <noscript>
+          <a class="btn btn--primary" href="https://luvletternails.as.me/schedule/ea9af220" target="_blank" rel="noopener">Open the booking page ↗</a>
+        </noscript>
       </div>
+      <p class="book__fallback">
+        Scheduler not loading? <a id="acuityFallback" href="https://luvletternails.as.me/schedule/ea9af220" target="_blank" rel="noopener">Open the booking page ↗</a>
+      </p>
     </section>
 
     <!-- ===== About ===== -->
@@ -523,10 +440,6 @@
 
   <div class="airmail-stripe" aria-hidden="true"></div>
 
-  <!-- Supabase client (only "lights up" once js/config.js has your keys) -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="js/config.js"></script>
-  <script src="js/supabase.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>
