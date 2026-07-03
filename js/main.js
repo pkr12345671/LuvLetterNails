@@ -13,7 +13,7 @@ const CONFIG = {
 
   // Her Square store / checkout / payment link for press-on orders. Leave "" to
   // hide the Square button (press-ons stay a request form only).
-  SQUARE_PRESSIES_URL: "",
+  SQUARE_PRESSIES_URL: "https://www.luvletterpressies.com/",
 
   // Where the press-on "Request your set" form sends. "" → opens a pre-filled
   // email to CONTACT_EMAIL. To collect online, paste a free Formspree endpoint
@@ -118,10 +118,12 @@ function initMailto() {
 /* ---------- Square press-on payments ---------- */
 function initSquare() {
   const url = CONFIG.SQUARE_PRESSIES_URL;
-  if (!url) return; // no link set → keep the Square button hidden
-  document.querySelectorAll(".js-square").forEach((a) => { a.href = url; });
-  const cta = document.getElementById("squareCta");
-  if (cta) cta.hidden = false;
+  if (!url) return; // no link set → keep the Square buttons hidden
+  document.querySelectorAll(".js-square").forEach((a) => {
+    a.href = url;
+    const wrap = a.closest("[hidden]");
+    if (wrap) wrap.hidden = false;
+  });
 }
 
 /* ---------- Acuity scheduler embed (in-person booking) ---------- */
