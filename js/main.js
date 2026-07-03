@@ -131,8 +131,8 @@ function initAcuity() {
   const mount = document.getElementById("acuityEmbed");
   if (!mount) return;
 
-  const fallback = document.getElementById("acuityFallback");
-  if (fallback) fallback.href = CONFIG.ACUITY_URL;
+  // point every "Book on Acuity" link at the configured URL
+  document.querySelectorAll(".js-acuity").forEach((a) => { a.href = CONFIG.ACUITY_URL; });
 
   // If the client pasted their official Acuity embed (an <iframe>), leave it.
   if (mount.querySelector("iframe")) return;

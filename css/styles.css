@@ -520,6 +520,7 @@ section > * { max-width: var(--maxw); margin-inline: auto; }
 }
 .book__embed iframe { width: 100%; min-height: 800px; border: 0; display: block; }
 .book__embed .btn { margin: 3rem auto; }
+.book__cta { margin: 2rem 0 0.5rem; }
 .book__fallback { margin: 1rem 0 0; font-size: 0.9rem; color: var(--ink-soft); }
 
 /* Square press-on CTA */

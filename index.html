@@ -277,14 +277,19 @@
           the <strong>$20 non-refundable deposit</strong> (it comes off your total).</p>
       </div>
 
-      <!-- Live scheduler — the artist's Acuity, embedded (injected by JS). -->
+      <!-- Prominent, always-works booking button -->
+      <p class="book__cta">
+        <a class="btn btn--primary js-acuity" href="https://luvletternails.as.me/schedule/ea9af220" target="_blank" rel="noopener">Book on Acuity ↗</a>
+      </p>
+
+      <!-- Live scheduler — the artist's Acuity, embedded inline (injected by JS). -->
       <div class="book__embed reveal" id="acuityEmbed">
         <noscript>
-          <a class="btn btn--primary" href="https://luvletternails.as.me/schedule/ea9af220" target="_blank" rel="noopener">Open the booking page ↗</a>
+          <a class="btn btn--primary js-acuity" href="https://luvletternails.as.me/schedule/ea9af220" target="_blank" rel="noopener">Open the booking page ↗</a>
         </noscript>
       </div>
       <p class="book__fallback">
-        Scheduler not loading? <a id="acuityFallback" href="https://luvletternails.as.me/schedule/ea9af220" target="_blank" rel="noopener">Open the booking page ↗</a>
+        Prefer a new tab? <a class="js-acuity" href="https://luvletternails.as.me/schedule/ea9af220" target="_blank" rel="noopener">Open the booking page ↗</a>
       </p>
     </section>
 
